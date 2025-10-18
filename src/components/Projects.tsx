@@ -20,7 +20,7 @@ export default function Projects() {
       icon: Activity,
       title: 'Fitness Tracker Application',
       description: 'Comprehensive web platform for tracking fitness activities and analyzing health metrics. Provides users with insights into their workout routines and progress over time.',
-      technologies: ['Flask', 'Django', 'Python', 'JavaScript', 'MySQL'],
+      technologies: ['Flask', 'Django', 'Python', 'JavaScript', 'MongoDB'],
       color: 'from-orange-600 to-red-600',
     },
     {
