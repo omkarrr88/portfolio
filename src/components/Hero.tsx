@@ -103,7 +103,7 @@ export default function Hero() {
                 <img
                   src={MyImage}
                   alt="Omkar Kadam"
-                  className="w-32 h-32 md:w-48 md:h-48 object-contain"
+                  className="w-72 h-72 md:w-96 md:h-96 object-contain"
                 />
               </div>
             </div>
