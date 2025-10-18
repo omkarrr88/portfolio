@@ -97,18 +97,19 @@ export default function Hero() {
 
           {/* Right Image Section */}
           <div className="flex-1 flex justify-center animate-float">
-  <div className="relative">
-    <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full blur-3xl opacity-20 animate-pulse" />
-    <div className="relative w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-teal-600 to-amber-600 rounded-full flex items-center justify-center shadow-2xl overflow-hidden">
-      <img
-  src={MyImage}
-  alt="Omkar Kadam"
-  style={{ borderRadius: '50%', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-/>
-    </div>
-  </div>
-</div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full blur-3xl opacity-20 animate-pulse" />
+              <div className="relative w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-teal-600 to-amber-600 rounded-full flex items-center justify-center shadow-2xl overflow-hidden">
+                <img
+                  src={MyImage}
+                  alt="Omkar Kadam"
+                  style={{ borderRadius: '50%', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+            </div>
+          </div>
 
+        </div>
 
         {/* Scroll Down Button */}
         <button
