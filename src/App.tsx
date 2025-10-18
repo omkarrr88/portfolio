@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'education', 'skills', 'projects', 'certifications', 'experience', 'languages', 'contact'];
+      const sections = ['home', 'about', 'education', 'skills', 'projects', 'certifications', 'experience', 'contact'];
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -43,7 +43,6 @@ function App() {
       <Projects />
       <Certifications />
       <Experience />
-      <Languages />
       <Contact />
       <Footer />
     </div>
