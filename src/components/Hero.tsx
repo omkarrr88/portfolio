@@ -51,7 +51,7 @@ export default function Hero() {
                 Get in Touch
               </a>
               <button
-                onClick={() => window.open('#', '_blank')}
+                onClick={() => window.open('https://drive.google.com/file/d/15-I_8nTzdLquwk4MPWa0ilm1JAqYwXyM/view?usp=sharing')}
                 className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-600 rounded-lg font-medium hover:border-teal-600 hover:text-teal-600 dark:hover:border-teal-400 dark:hover:text-teal-400 hover:shadow-lg hover:scale-105 transition-all"
               >
                 <Download size={20} />
