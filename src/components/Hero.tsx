@@ -56,7 +56,7 @@ export default function Hero() {
               <button
                 onClick={() =>
                   window.open(
-                    'https://drive.google.com/file/d/15-I_8nTzdLquwk4MPWa0ilm1JAqYwXyM/view?usp=sharing',
+                    'https://drive.google.com/file/d/1KHNiHUPrne6YRXO7bAJZQq5sLhrCWc8O/view?usp=sharing',
                     '_blank',
                     'noopener,noreferrer'
                   )
@@ -87,7 +87,7 @@ export default function Hero() {
                 <Github size={24} />
               </a>
               <a
-                href="mailto:omkark2223@ternaengg.ac.in"
+                href="mailto:omkarkadam181188@gmail.com"
                 className="p-3 bg-white dark:bg-slate-700 rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all text-slate-700 dark:text-slate-200 hover:text-red-600 dark:hover:text-red-400"
               >
                 <Mail size={24} />
