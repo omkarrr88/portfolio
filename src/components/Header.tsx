@@ -28,6 +28,7 @@ export default function Header({ activeSection }: HeaderProps) {
     { id: 'projects', label: 'Projects' },
     { id: 'certifications', label: 'Certifications' },
     { id: 'experience', label: 'Experience' },
+    { id: 'extracurriculars', label: 'Extracurriculars' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -48,13 +49,12 @@ export default function Header({ activeSection }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-lg'
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-lg'
+        : 'bg-transparent'
+        }`}
     >
-      <nav className="container mx-auto px-6 py-4">
+      <nav className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <button
             onClick={() => scrollToSection('home')}
@@ -68,17 +68,15 @@ export default function Header({ activeSection }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`text-sm font-medium transition-colors relative group ${
-                  activeSection === item.id
-                    ? 'text-teal-600 dark:text-teal-400'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400'
-                }`}
+                className={`text-sm font-medium transition-colors relative group ${activeSection === item.id
+                  ? 'text-teal-600 dark:text-teal-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400'
+                  }`}
               >
                 {item.label}
                 <span
-                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-teal-600 dark:bg-teal-400 transform origin-left transition-transform ${
-                    activeSection === item.id ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-teal-600 dark:bg-teal-400 transform origin-left transition-transform ${activeSection === item.id ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
                 />
               </button>
             ))}
@@ -114,11 +112,10 @@ export default function Header({ activeSection }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-4 py-2 text-sm font-medium transition-colors ${
-                  activeSection === item.id
-                    ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-slate-700'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
+                className={`block w-full text-left px-4 py-2 text-sm font-medium transition-colors ${activeSection === item.id
+                  ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-slate-700'
+                  : 'text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
               >
                 {item.label}
               </button>

@@ -4,11 +4,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 text-white py-12 px-6">
+    <footer className="bg-slate-900 text-white py-12 px-4 sm:px-6">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-amber-400 bg-clip-text text-transparent mb-4">
               Omkar Kadam
             </h3>
             <p className="text-slate-400 leading-relaxed">
@@ -19,7 +19,7 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['About', 'Education', 'Skills', 'Projects', 'Experience', 'Contact'].map((item) => (
+              {['About', 'Education', 'Skills', 'Projects', 'Experience', 'Extracurriculars', 'Contact'].map((item) => (
                 <li key={item}>
                   <button
                     onClick={() => {

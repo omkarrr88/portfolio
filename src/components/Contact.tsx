@@ -1,5 +1,7 @@
-import { Mail, Phone, Linkedin, Github, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { Mail, Phone, Linkedin, Github, MapPin, Send } from 'lucide-react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -10,33 +12,37 @@ export default function Contact() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{type: 'success' | 'error', message: string} | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
+    const loadingToast = toast.loading('Sending message...');
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`, {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          Accept: 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        setSubmitStatus({ type: 'success', message: result.message });
+        toast.success('Message sent successfully! I will get back to you soon.', { id: loadingToast });
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
-        setSubmitStatus({ type: 'error', message: result.message });
+        toast.error(result.error || 'Server rejected message.', { id: loadingToast });
       }
     } catch (error) {
-      setSubmitStatus({ type: 'error', message: 'Network error. Please try again.' });
+      toast.error('Network Error: Are you running the backend via "npx vercel dev"?', { id: loadingToast, duration: 6000 });
     } finally {
       setIsSubmitting(false);
     }
@@ -88,10 +94,10 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-20 px-6 bg-white dark:bg-slate-900 transition-colors duration-300">
+    <section id="contact" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Get In Touch
           </h2>
           <div className="h-1 w-24 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full mx-auto" />
@@ -101,7 +107,13 @@ export default function Contact() {
         </div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
+          >
             <div className="bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
                 Contact Information
@@ -153,6 +165,7 @@ export default function Contact() {
               <p className="leading-relaxed mb-6">
                 Whether you have a question, want to collaborate on a project, or just want to say hi, I'd love to hear from you. Drop me a message and I'll get back to you as soon as possible.
               </p>
+
               <div className="flex gap-4">
                 <a
                   href="https://linkedin.com/in/omkarrrr"
@@ -178,9 +191,15 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-lg p-8">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-lg p-8"
+          >
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
               Send a Message
             </h3>
@@ -197,7 +216,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="John Doe"
+                  placeholder="e.g. Alex Smith"
                 />
               </div>
 
@@ -213,7 +232,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="john@example.com"
+                  placeholder="e.g. alex@company.com"
                 />
               </div>
 
@@ -229,7 +248,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="Project Collaboration"
+                  placeholder="Software Engineering Opportunity"
                 />
               </div>
 
@@ -245,15 +264,9 @@ export default function Contact() {
                   required
                   rows={6}
                   className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all resize-none"
-                  placeholder="Your message here..."
+                  placeholder="Please describe how we can collaborate..."
                 />
               </div>
-
-              {submitStatus && (
-                <div className={`p-4 rounded-lg ${submitStatus.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200' : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200'}`}>
-                  {submitStatus.message}
-                </div>
-              )}
 
               <button
                 type="submit"
@@ -264,7 +277,7 @@ export default function Contact() {
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
