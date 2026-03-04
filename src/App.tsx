@@ -39,7 +39,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       <Toaster position="bottom-right" toastOptions={{ duration: 4000, className: 'dark:bg-slate-800 dark:text-white' }} />
       <Preloader />
 
