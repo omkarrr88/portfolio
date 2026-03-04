@@ -96,7 +96,7 @@ export default function Projects() {
                 ))}
               </div>
 
-              <div className="flex gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex flex-wrap justify-between items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                 <button
                   onClick={() => setSelectedProject(project)}
                   className="flex items-center gap-2 text-teal-600 dark:text-teal-400 hover:text-amber-600 dark:hover:text-amber-400 font-semibold text-sm transition-colors uppercase tracking-wider"
@@ -108,7 +108,7 @@ export default function Projects() {
                   href={project.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-slate-500 hover:text-blue-700 dark:hover:text-blue-400 font-medium text-sm transition-colors ml-auto"
+                  className="flex items-center gap-2 text-slate-500 hover:text-blue-700 dark:hover:text-blue-400 font-medium text-sm transition-colors md:ml-auto"
                 >
                   <Github size={16} />
                   Code

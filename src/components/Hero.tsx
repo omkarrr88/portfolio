@@ -65,9 +65,9 @@ export default function Hero() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-1 space-y-6"
+            className="flex-1 space-y-6 flex flex-col items-center md:items-start text-center md:text-left mt-10 md:mt-0"
           >
-            <motion.div variants={itemVariants} className="space-y-2">
+            <motion.div variants={itemVariants} className="space-y-2 flex flex-col items-center md:items-start">
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-slate-900 dark:text-white leading-tight">
                 Hi, I'm{' '}
                 <span className="bg-gradient-to-r from-teal-600 to-amber-600 bg-clip-text text-transparent inline-block hover:scale-105 transition-transform cursor-default">
@@ -82,22 +82,22 @@ export default function Hero() {
               />
             </motion.div>
 
-            <motion.p variants={itemVariants} className="text-xl md:text-2xl text-slate-700 dark:text-slate-200 font-medium">
+            <motion.p variants={itemVariants} className="text-lg sm:text-xl md:text-2xl text-slate-700 dark:text-slate-200 font-medium">
               Full Stack Machine Learning Developer
             </motion.p>
 
-            <motion.p variants={itemVariants} className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+            <motion.p variants={itemVariants} className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
               Final-year Information Technology Engineering student at Terna Engineering College, Mumbai University.
               Passionate about building innovative solutions with AI, ML, and web technologies.
             </motion.p>
 
             {/* Action Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-2">
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 href="mailto:omkark2223@ternaengg.ac.in"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg font-medium shadow-lg hover:shadow-teal-500/30 transition-shadow"
+                className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-3 w-full sm:w-auto bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg font-medium shadow-lg hover:shadow-teal-500/30 transition-shadow"
               >
                 <Mail size={20} />
                 Get in Touch
@@ -112,7 +112,7 @@ export default function Hero() {
                     'noopener,noreferrer'
                   )
                 }
-                className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-600 rounded-lg font-medium hover:border-teal-600 hover:text-teal-600 dark:hover:border-teal-400 dark:hover:text-teal-400 shadow-md transition-colors"
+                className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-3 w-full sm:w-auto bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-600 rounded-lg font-medium hover:border-teal-600 hover:text-teal-600 dark:hover:border-teal-400 dark:hover:text-teal-400 shadow-md transition-colors"
               >
                 <Download size={20} />
                 Download Resume
@@ -120,7 +120,7 @@ export default function Hero() {
             </motion.div>
 
             {/* Social Icons */}
-            <motion.div variants={itemVariants} className="flex gap-4 pt-4">
+            <motion.div variants={itemVariants} className="flex gap-4 pt-6 justify-center md:justify-start w-full">
               <motion.a whileHover={{ y: -5 }} href="https://linkedin.com/in/omkarrrr" target="_blank" rel="noopener noreferrer" className="p-3 bg-white dark:bg-slate-700 rounded-full shadow-md text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400">
                 <Linkedin size={24} />
               </motion.a>
@@ -139,7 +139,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: 'easeOut' }}
-            className="flex-1 flex justify-center animate-float relative"
+            className="flex-1 flex justify-center animate-float relative mt-8 md:mt-0 order-first md:order-last"
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full blur-3xl opacity-30 animate-pulse" />

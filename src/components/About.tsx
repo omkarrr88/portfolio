@@ -61,7 +61,7 @@ export default function About() {
                 className="p-6 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-md hover:shadow-xl transition-all hover:scale-105 group"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-teal-600 to-amber-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-3 bg-gradient-to-br from-teal-600 to-amber-600 rounded-lg text-white group-hover:scale-110 transition-transform shrink-0">
                     <item.icon size={24} />
                   </div>
                   <div className="flex-1">

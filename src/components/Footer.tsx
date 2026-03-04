@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 text-white py-12 px-4 sm:px-6">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-amber-400 bg-clip-text text-transparent mb-4">
               Omkar Kadam
             </h3>
@@ -16,9 +16,9 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+          <div className="flex flex-col items-center md:items-start">
+            <h4 className="text-lg font-semibold mb-4 text-center md:text-left">Quick Links</h4>
+            <ul className="space-y-2 flex flex-col items-center md:items-start">
               {['About', 'Education', 'Skills', 'Projects', 'Experience', 'Extracurriculars', 'Contact'].map((item) => (
                 <li key={item}>
                   <button
@@ -40,9 +40,9 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h4 className="text-lg font-semibold mb-4">Connect</h4>
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-4 justify-center md:justify-start">
               <a
                 href="https://linkedin.com/in/omkarrrr"
                 target="_blank"
