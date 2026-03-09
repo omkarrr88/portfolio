@@ -82,6 +82,22 @@
   }
 }
 
+/* Prevent nav overflow on tiny screens */
+@media only screen and (max-width: 360px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 0;
+  }
+  .header ul {
+    column-gap: 12px;
+    font-size: 10px;
+  }
+  .navbar-title {
+    font-size: 12px;
+  }
+}
+
 /* Active nav link */
 .header ul a.nav-active {
   color: var(--accentColor);

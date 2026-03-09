@@ -171,3 +171,22 @@
     border-bottom: none;
   }
 }
+
+@media only screen and (max-width: 480px) {
+  .extra-title h2 {
+    font-size: 32px;
+    line-height: 34px;
+  }
+
+  .extra-card-title {
+    font-size: 17px;
+  }
+
+  .extra-card-role {
+    font-size: 13px;
+  }
+
+  .extra-card-desc {
+    font-size: 13px;
+  }
+}

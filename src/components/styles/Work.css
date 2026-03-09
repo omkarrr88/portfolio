@@ -346,6 +346,10 @@
     font-size: 24px;
   }
 
+  .work-info > p {
+    width: 100%;
+  }
+
   .see-all-works p {
     font-size: 14px;
   }

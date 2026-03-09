@@ -79,10 +79,24 @@
   .cta-buttons {
     flex-direction: column;
     gap: 15px;
+    width: 100%;
   }
 
   .cta-btn {
     justify-content: center;
     padding: 12px 28px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .cta-headline {
+    font-size: 19px;
+  }
+
+  .cta-subtext {
+    font-size: 13px;
   }
 }

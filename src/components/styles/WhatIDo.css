@@ -439,11 +439,49 @@
     place-items: inherit;
     align-items: start;
     justify-content: left;
+    overflow-x: hidden;
   }
 
   .what-box {
     max-width: calc(100% - 25px);
     margin: 0;
+  }
+
+  .what-box-in {
+    height: 380px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .what-content {
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .what-content h3 {
+    font-size: 20px;
+  }
+
+  .what-content p {
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  .what-noTouch:hover,
+  .what-content-active {
+    padding: 15px 20px;
+  }
+
+  .what-noTouch:hover~.what-content,
+  .what-box-in:hover .what-noTouch:not(:hover),
+  .what-content.what-sibling {
+    padding: 5px 20px;
+  }
+
+  .what-border1 svg,
+  .what-border2 svg {
+    width: 100%;
+    max-width: 100vw;
   }
 }
 

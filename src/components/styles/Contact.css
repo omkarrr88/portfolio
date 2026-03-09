@@ -138,6 +138,28 @@ a.contact-social {
   }
 }
 
+@media only screen and (max-width: 480px) {
+  .contact-section h3 {
+    font-size: 28px;
+  }
+  .contact-form-wrapper {
+    max-width: 100%;
+    margin-top: 40px;
+    padding-top: 30px;
+  }
+  .contact-form-title {
+    font-size: 14px;
+  }
+  .contact-form-field label {
+    font-size: 11px;
+  }
+  .contact-form-field input,
+  .contact-form-field textarea,
+  .contact-form-field select {
+    font-size: 14px;
+  }
+}
+
 /* ── Send a Message form ─────────────────────────────────────── */
 
 .contact-form-wrapper {
