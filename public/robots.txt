@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://omkar-kadam.vercel.app/sitemap.xml

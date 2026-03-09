@@ -7,13 +7,13 @@ export const config = {
     },
     social: {
         github: "omkarrr88",
-        email: "omkark2223@ternaengg.ac.in",
+        email: "omkarkadam181188@gmail.com",
         phone: "+91 9987703661",
         location: "Navi Mumbai, Maharashtra"
     },
     about: {
         title: "About Me",
-        description: "Final-year IT student at Terna Engineering College and Platform Engineer at Riamona. I build ML-powered systems and modern web apps — from V2V collision detection to intelligent recommendation engines. VP of CSI & Deputy Secretary of the T&P Cell."
+        description: "I'm a final-year IT student at Terna Engineering College and Platform Engineer at Riamona, where I work on cloud infrastructure and e-commerce platforms. I'm passionate about the intersection of web development and machine learning — I've built projects ranging from a V2V collision simulation to ML-based recommendation engines. VP of CSI & Deputy Secretary of the T&P Cell. I'm actively looking for full-time roles in full-stack development or ML engineering."
     },
     experiences: [
         {
@@ -29,62 +29,6 @@ export const config = {
                 "Working with cross-functional teams on product delivery"
             ],
             technologies: ["Cloud", "CI/CD", "Docker", "Node.js", "React", "DevOps"]
-        },
-        {
-            position: "AI/ML Developer",
-            company: "Projects & Research",
-            period: "2025",
-            location: "Mumbai",
-            description: "Building intelligent AI systems, V2V collision detection, face recognition attendance, and machine learning models. Earned Generative AI Mastermind certification.",
-            responsibilities: [
-                "Developing V2V Communication System for collision detection",
-                "Building face recognition attendance systems with OpenCV",
-                "Working with machine learning models and deep learning",
-                "Researching generative AI and transformer architectures"
-            ],
-            technologies: ["Python", "TensorFlow", "OpenCV", "Scikit-learn", "NLP", "Deep Learning"]
-        },
-        {
-            position: "Full-Stack Developer",
-            company: "Projects & Google Cloud",
-            period: "2024",
-            location: "Mumbai",
-            description: "Built complete web applications including Fitness Tracker and Movie Recommendation System. Earned Google Cloud Skills Boost Arcade certification.",
-            responsibilities: [
-                "Developing full-stack web applications using React and Node.js",
-                "Building RESTful APIs and integrating databases",
-                "Creating responsive and interactive user interfaces",
-                "Deploying applications on cloud platforms"
-            ],
-            technologies: ["React", "Node.js", "MongoDB", "Express", "Flask", "JavaScript"]
-        },
-        {
-            position: "Oracle Cloud Infrastructure",
-            company: "Certifications & Foundations",
-            period: "2023",
-            location: "Mumbai",
-            description: "Earned Oracle Cloud Infrastructure certification. Built foundational skills in Java, Python, and machine learning fundamentals.",
-            responsibilities: [
-                "Learning cloud infrastructure and OCI services",
-                "Building foundational programming skills in Java and Python",
-                "Exploring machine learning fundamentals",
-                "Completing industry-recognized certifications"
-            ],
-            technologies: ["Oracle Cloud", "Java", "Python", "ML Basics", "Problem Solving"]
-        },
-        {
-            position: "Started Engineering",
-            company: "Terna Engineering College",
-            period: "2022",
-            location: "Mumbai",
-            description: "Began B.E. in Information Technology at Terna Engineering College, Mumbai University. Started the journey into software development and technology.",
-            responsibilities: [
-                "Learning core computer science fundamentals",
-                "Building foundational programming skills",
-                "Exploring data structures and algorithms",
-                "Participating in college technical events"
-            ],
-            technologies: ["C", "C++", "Java", "Python", "Data Structures", "Algorithms"]
         }
     ],
     projects: [
@@ -93,45 +37,63 @@ export const config = {
             title: "V2V Communication",
             category: "IoT / Simulation",
             technologies: "Python, Simulation, Networking, IoT, Sensor Processing",
-            image: "/images/placeholder.webp",
+            image: "/images/v2v.webp",
             description: "Vehicle-to-Vehicle communication system for collision detection and avoidance. Uses IoT sensors and simulation to enable real-time communication between vehicles.",
             link: "https://github.com/omkarrr88/V2V"
         },
         {
             id: 2,
+            title: "Shopify Gold Price Automation",
+            category: "Automation / Backend",
+            technologies: "Python, Flask, PostgreSQL, Shopify GraphQL API, BeautifulSoup, Railway, Telegram Bot",
+            image: "/images/gold-automation.webp",
+            description: "End-to-end automated pricing engine for a jewellery Shopify store. Scrapes live gold rates from IBJA twice daily, recalculates 55,000+ variant prices using a component-wise formula (gold weight × purity rate + diamond + making charge), and pushes all updates via Shopify GraphQL Bulk Operations — fully unattended.",
+            link: ""
+        },
+        {
+            id: 3,
+            title: "Invoice & Payment Portal",
+            category: "Full Stack / Enterprise",
+            technologies: "React, TypeScript, Express.js, Prisma, PostgreSQL, TailwindCSS, shadcn/ui, Railway",
+            image: "/images/invoice-portal.webp",
+            description: "Enterprise financial management platform with invoice tracking, slab-based early-payment discounts, daily interest penalty calculations, UTR verification workflow, and role-based access for 5 user types. Supports bulk Excel invoice import and a payment simulator showing how payable amounts change by date.",
+            link: ""
+        },
+        {
+            id: 4,
             title: "Face Recognition Attendance",
             category: "Computer Vision",
             technologies: "Python, OpenCV, Computer Vision, MySQL, Haarcascades",
-            image: "/images/placeholder.webp",
+            image: "/images/face-recognition.webp",
             description: "Automated attendance system using face recognition with OpenCV and Haarcascade classifiers. Features real-time face detection and MySQL database integration.",
             link: "https://github.com/omkarrr88/face-recognition-attendance-system"
         },
         {
-            id: 3,
+            id: 5,
             title: "Fitness Tracker",
             category: "Full Stack",
             technologies: "JavaScript, Chart.js, Responsive Design, Analytics",
-            image: "/images/placeholder.webp",
+            image: "/images/fitness.webp",
             description: "A comprehensive fitness tracking application with data visualization using Chart.js. Features responsive design and analytics dashboard for tracking workouts.",
             link: "https://github.com/omkarrr88/Fitness-Tracker"
         },
         {
-            id: 4,
+            id: 6,
             title: "Movie Recommendation",
             category: "ML / Full Stack",
             technologies: "Python, NLTK, Scikit-learn, React, Flask, APIs",
-            image: "/images/placeholder.webp",
+            image: "/images/movie.webp",
             description: "Machine learning-powered movie recommendation system using NLTK and Scikit-learn. Features a React frontend with Flask backend and external API integration.",
             link: "https://github.com/omkarrr88/movie-recommendation-system"
         }
     ],
     contact: {
-        email: "omkark2223@ternaengg.ac.in",
+        email: "omkarkadam181188@gmail.com",
         github: "https://github.com/omkarrr88",
         linkedin: "https://linkedin.com/in/omkarrrr",
         phone: "+91 9987703661"
     },
-    resume: "https://drive.google.com/file/d/1KHNiHUPrne6YRXO7bAJZQq5sLhrCWc8O/view?usp=sharing",
+    resume: "/resume.pdf",
     skills: {
         develop: {
             title: "ML ENGINEER",

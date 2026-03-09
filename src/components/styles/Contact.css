@@ -178,7 +178,8 @@ a.contact-social {
 }
 
 .contact-form-field input,
-.contact-form-field textarea {
+.contact-form-field textarea,
+.contact-form-field select {
   background: transparent;
   border: none;
   border-bottom: 1px solid #363636;
@@ -192,6 +193,23 @@ a.contact-social {
   resize: none;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.contact-form-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23eae5ec' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  padding-right: 24px;
+}
+
+.contact-form-field select option {
+  background: #1a1520;
+  color: #eae5ec;
 }
 
 .contact-form-field input::placeholder,
@@ -200,7 +218,8 @@ a.contact-social {
 }
 
 .contact-form-field input:focus,
-.contact-form-field textarea:focus {
+.contact-form-field textarea:focus,
+.contact-form-field select:focus {
   border-bottom-color: var(--accentColor);
 }
 

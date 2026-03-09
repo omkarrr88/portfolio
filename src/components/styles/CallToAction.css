@@ -3,8 +3,25 @@
   padding: 80px 20px;
   background-color: var(--backgroundColor);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 16px;
+}
+
+.cta-headline {
+  font-size: 28px;
+  font-weight: 500;
+  color: #eae5ec;
+  margin: 0;
+  text-align: center;
+}
+
+.cta-subtext {
+  font-size: 15px;
+  color: rgba(234, 229, 236, 0.5);
+  margin: 0 0 8px 0;
+  text-align: center;
 }
 
 .cta-buttons {
@@ -53,6 +70,10 @@
 @media only screen and (max-width: 768px) {
   .cta-section {
     padding: 60px 20px;
+  }
+
+  .cta-headline {
+    font-size: 22px;
   }
 
   .cta-buttons {

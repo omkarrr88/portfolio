@@ -81,3 +81,8 @@
     font-size: 18px;
   }
 }
+
+/* Active nav link */
+.header ul a.nav-active {
+  color: var(--accentColor);
+}

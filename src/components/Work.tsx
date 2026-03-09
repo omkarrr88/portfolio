@@ -55,9 +55,9 @@ const Work = () => {
     };
   }, []);
   return (
-    <div className="work-section" id="work">
+    <section className="work-section" id="work" aria-labelledby="work-heading">
       <div className="work-container section-container">
-        <h2>
+        <h2 id="work-heading">
           My <span>Work</span>
         </h2>
         <div className="work-flex">
@@ -88,7 +88,7 @@ const Work = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

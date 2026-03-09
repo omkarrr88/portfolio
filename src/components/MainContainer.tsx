@@ -13,6 +13,7 @@ import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import TechStackNew from "./TechStackNew";
 import CallToAction from "./CallToAction";
+import ScrollProgress from "./ScrollProgress";
 import setSplitText from "./utils/splitText";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
@@ -34,7 +35,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   }, [isDesktopView]);
 
   return (
-    <div className="container-main">
+    <main className="container-main">
       <Toaster
         position="bottom-right"
         toastOptions={{
@@ -46,6 +47,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
         }}
       />
       <Cursor />
+      <ScrollProgress />
       <Navbar />
       <SocialIcons />
       {isDesktopView && !isMobile && children}
@@ -61,7 +63,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
         <CallToAction />
         <Contact />
       </div>
-    </div>
+    </main>
   );
 };
 

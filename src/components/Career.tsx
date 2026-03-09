@@ -11,9 +11,9 @@ const getDisplayYear = (period: string) => {
 
 const Career = () => {
   return (
-    <div className="career-section section-container">
+    <section className="career-section section-container" aria-labelledby="career-heading">
       <div className="career-container">
-        <h2>
+        <h2 id="career-heading">
           My career <span>&</span>
           <br /> experience
         </h2>
@@ -35,7 +35,7 @@ const Career = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

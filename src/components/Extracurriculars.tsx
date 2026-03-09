@@ -35,6 +35,9 @@ const activities = [
 
 const Extracurriculars = () => {
   useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".extra-title",
@@ -90,9 +93,9 @@ const Extracurriculars = () => {
   }, []);
 
   return (
-    <div className="extra-section section-container" id="extracurriculars">
+    <section className="extra-section section-container" id="extracurriculars" aria-labelledby="extra-heading">
         <div className="extra-title">
-          <h2>Extracurricular Activities</h2>
+          <h2 id="extra-heading">Extracurricular Activities</h2>
         </div>
 
         <div className="extra-grid">
@@ -114,7 +117,7 @@ const Extracurriculars = () => {
           communication, and organizational skills while contributing to a vibrant
           campus community.
         </p>
-    </div>
+    </section>
   );
 };
 

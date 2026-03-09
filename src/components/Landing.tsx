@@ -5,7 +5,7 @@ import { config } from "../config";
 const Landing = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <div className="landing-section" id="landingDiv">
+      <section className="landing-section" id="landingDiv">
         <div className="landing-container">
           <div className="landing-intro">
             <h2>Hello! I am</h2>
@@ -26,11 +26,11 @@ const Landing = ({ children }: PropsWithChildren) => {
             </h2>
           </div>
           <div className="mobile-photo">
-            <img src="/images/mypicnbg.png" alt={config.developer.fullName} />
+            <img src="/images/mypicnbg.webp" alt="Omkar Kadam — Full Stack Developer and ML Engineer" loading="eager" />
           </div>
         </div>
         {children}
-      </div>
+      </section>
     </>
   );
 };

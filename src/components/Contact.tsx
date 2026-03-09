@@ -19,7 +19,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -79,9 +79,9 @@ const Contact = () => {
   }, []);
 
   return (
-    <div className="contact-section section-container" id="contact">
+    <section className="contact-section section-container" id="contact" aria-labelledby="contact-heading">
       <div className="contact-container">
-        <h3>{config.developer.fullName}</h3>
+        <h3 id="contact-heading">{config.developer.fullName}</h3>
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Email</h4>
@@ -109,8 +109,9 @@ const Contact = () => {
               rel="noopener noreferrer"
               data-cursor="disable"
               className="contact-social"
+              aria-label="GitHub profile"
             >
-              Github <MdArrowOutward />
+              Github <MdArrowOutward aria-hidden="true" />
             </a>
             <a
               href={config.contact.linkedin}
@@ -118,8 +119,9 @@ const Contact = () => {
               rel="noopener noreferrer"
               data-cursor="disable"
               className="contact-social"
+              aria-label="LinkedIn profile"
             >
-              Linkedin <MdArrowOutward />
+              Linkedin <MdArrowOutward aria-hidden="true" />
             </a>
           </div>
           <div className="contact-box">
@@ -163,16 +165,20 @@ const Contact = () => {
             </div>
             <div className="contact-form-field">
               <label htmlFor="contact-subject">Subject</label>
-              <input
-                type="text"
+              <select
                 id="contact-subject"
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                placeholder="Software Engineering Opportunity"
-                autoComplete="off"
-              />
+              >
+                <option value="" disabled>Select a subject</option>
+                <option value="Job Opportunity">Job Opportunity</option>
+                <option value="Freelance Project">Freelance Project</option>
+                <option value="Collaboration">Collaboration</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <div className="contact-form-field">
               <label htmlFor="contact-message">Message</label>
@@ -197,7 +203,7 @@ const Contact = () => {
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

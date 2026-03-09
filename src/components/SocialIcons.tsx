@@ -57,19 +57,19 @@ const SocialIcons = () => {
 
   return (
     <div className="icons-section">
-      <div className="social-icons" data-cursor="icons" id="social">
+      <div className="social-icons" data-cursor="icons" id="social" aria-label="Social media links">
         <span>
-          <a href={config.contact.github} target="_blank" rel="noopener noreferrer">
+          <a href={config.contact.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
             <FaGithub />
           </a>
         </span>
         <span>
-          <a href={config.contact.linkedin} target="_blank" rel="noopener noreferrer">
+          <a href={config.contact.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
             <FaLinkedinIn />
           </a>
         </span>
       </div>
-      <a className="resume-button" href={config.resume} target="_blank" rel="noopener noreferrer">
+      <a className="resume-button" href={config.resume} download="Omkar_Kadam_Resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Download resume">
         <HoverLinks text="RESUME" />
         <span>
           <TbNotes />

@@ -35,6 +35,9 @@ const education = [
 
 const Education = () => {
   useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".education-title",
@@ -74,9 +77,9 @@ const Education = () => {
   }, []);
 
   return (
-    <div className="education-section section-container" id="education">
+    <section className="education-section section-container" id="education" aria-labelledby="education-heading">
         <div className="education-title">
-          <h2>Education</h2>
+          <h2 id="education-heading">Education</h2>
         </div>
 
         <div className="education-list">
@@ -108,7 +111,7 @@ const Education = () => {
             </div>
           ))}
         </div>
-    </div>
+    </section>
   );
 };
 
