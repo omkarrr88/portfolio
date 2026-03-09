@@ -1,285 +1,204 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
-import { Mail, Phone, Linkedin, Github, MapPin, Send } from 'lucide-react';
+import { MdArrowOutward, MdCopyright } from "react-icons/md";
+import "./styles/Contact.css";
+import { config } from "../config";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useState } from "react";
+import { Send } from "lucide-react";
+import toast from "react-hot-toast";
 
-export default function Contact() {
+gsap.registerPlugin(ScrollTrigger);
+
+const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const loadingToast = toast.loading('Sending message...');
+    const loadingToast = toast.loading("Sending message...");
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        }),
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(formData),
       });
-
       const result = await response.json();
-
       if (response.ok) {
-        toast.success('Message sent successfully! I will get back to you soon.', { id: loadingToast });
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        toast.success("Message sent! I'll get back to you soon.", {
+          id: loadingToast,
+        });
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        toast.error(result.error || 'Server rejected message.', { id: loadingToast });
+        toast.error(result.error || "Failed to send message.", { id: loadingToast });
       }
-    } catch (error) {
-      toast.error('Network Error: Are you running the backend via "npx vercel dev"?', { id: loadingToast, duration: 6000 });
+    } catch {
+      toast.error("Network error. Please try again later.", { id: loadingToast });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  useEffect(() => {
+    const contactTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".contact-section",
+        start: "top 80%",
+        end: "bottom center",
+        toggleActions: "play none none none",
+      },
     });
-  };
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      label: 'Email',
-      value: 'omkark2223@ternaengg.ac.in',
-      link: 'mailto:omkark2223@ternaengg.ac.in',
-      color: 'from-red-600 to-orange-600',
-    },
-    {
-      icon: Phone,
-      label: 'Phone',
-      value: '+91 9987703661',
-      link: 'tel:+919987703661',
-      color: 'from-green-600 to-emerald-600',
-    },
-    {
-      icon: Linkedin,
-      label: 'LinkedIn',
-      value: 'linkedin.com/in/omkarrrr',
-      link: 'https://linkedin.com/in/omkarrrr',
-      color: 'from-teal-600 to-amber-600',
-    },
-    {
-      icon: Github,
-      label: 'GitHub',
-      value: 'github.com/omkarrr88',
-      link: 'https://github.com/omkarrr88',
-      color: 'from-slate-600 to-slate-800',
-    },
-    {
-      icon: MapPin,
-      label: 'Location',
-      value: 'Navi Mumbai, Maharashtra',
-      link: null,
-      color: 'from-orange-600 to-red-600',
-    },
-  ];
+    contactTimeline.fromTo(
+      ".contact-section h3",
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+    );
+
+    contactTimeline.fromTo(
+      ".contact-box",
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power3.out" },
+      "-=0.4"
+    );
+
+    return () => {
+      contactTimeline.kill();
+    };
+  }, []);
 
   return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white dark:bg-slate-900 transition-colors duration-300">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Get In Touch
-          </h2>
-          <div className="h-1 w-24 bg-gradient-to-r from-teal-600 to-amber-600 rounded-full mx-auto" />
-          <p className="text-lg text-slate-600 dark:text-slate-400 mt-4 max-w-2xl mx-auto">
-            I'm always open to discussing new projects, opportunities, and collaborations. Feel free to reach out!
-          </p>
+    <div className="contact-section section-container" id="contact">
+      <div className="contact-container">
+        <h3>{config.developer.fullName}</h3>
+        <div className="contact-flex">
+          <div className="contact-box">
+            <h4>Email</h4>
+            <p>
+              <a href={`mailto:${config.contact.email}`} data-cursor="disable">
+                {config.contact.email}
+              </a>
+            </p>
+            <h4>Phone</h4>
+            <p>
+              <a href={`tel:${config.contact.phone}`} data-cursor="disable">
+                {config.contact.phone}
+              </a>
+            </p>
+            <h4>Location</h4>
+            <p>
+              <span>{config.social.location}</span>
+            </p>
+          </div>
+          <div className="contact-box">
+            <h4>Social</h4>
+            <a
+              href={config.contact.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Github <MdArrowOutward />
+            </a>
+            <a
+              href={config.contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Linkedin <MdArrowOutward />
+            </a>
+          </div>
+          <div className="contact-box">
+            <h2>
+              Designed and Developed <br /> by <span>{config.developer.fullName}</span>
+            </h2>
+            <h5>
+              <MdCopyright /> {new Date().getFullYear()}
+            </h5>
+          </div>
         </div>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
-          >
-            <div className="bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                Contact Information
-              </h3>
-              <div className="space-y-4">
-                {contactInfo.map((item, index) => (
-                  <div key={index}>
-                    {item.link ? (
-                      <a
-                        href={item.link}
-                        target={item.link.startsWith('http') ? '_blank' : undefined}
-                        rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="flex items-start gap-4 p-4 bg-white dark:bg-slate-700 rounded-lg hover:shadow-md transition-all group"
-                      >
-                        <div className={`p-3 bg-gradient-to-br ${item.color} rounded-lg text-white group-hover:scale-110 transition-transform flex-shrink-0`}>
-                          <item.icon size={24} />
-                        </div>
-                        <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
-                            {item.label}
-                          </p>
-                          <p className="text-slate-900 dark:text-white font-semibold">
-                            {item.value}
-                          </p>
-                        </div>
-                      </a>
-                    ) : (
-                      <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-700 rounded-lg">
-                        <div className={`p-3 bg-gradient-to-br ${item.color} rounded-lg text-white flex-shrink-0`}>
-                          <item.icon size={24} />
-                        </div>
-                        <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
-                            {item.label}
-                          </p>
-                          <p className="text-slate-900 dark:text-white font-semibold">
-                            {item.value}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+        <div className="contact-form-wrapper">
+          <h4 className="contact-form-title">Send a Message</h4>
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="contact-form-field">
+              <label htmlFor="contact-name">Your Name</label>
+              <input
+                type="text"
+                id="contact-name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="e.g. Alex Smith"
+                autoComplete="name"
+              />
             </div>
-
-            <div className="bg-gradient-to-br from-teal-600 to-amber-600 rounded-xl shadow-lg p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">Let's Connect!</h3>
-              <p className="leading-relaxed mb-6">
-                Whether you have a question, want to collaborate on a project, or just want to say hi, I'd love to hear from you. Drop me a message and I'll get back to you as soon as possible.
-              </p>
-
-              <div className="flex gap-4">
-                <a
-                  href="https://linkedin.com/in/omkarrrr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-all hover:scale-110"
-                >
-                  <Linkedin size={24} />
-                </a>
-                <a
-                  href="https://github.com/omkarrr88"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-all hover:scale-110"
-                >
-                  <Github size={24} />
-                </a>
-                <a
-                  href="mailto:omkark2223@ternaengg.ac.in"
-                  className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-all hover:scale-110"
-                >
-                  <Mail size={24} />
-                </a>
-              </div>
+            <div className="contact-form-field">
+              <label htmlFor="contact-email">Your Email</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="e.g. alex@company.com"
+                autoComplete="email"
+              />
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-slate-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-lg p-8"
-          >
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-              Send a Message
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="e.g. Alex Smith"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Your Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="e.g. alex@company.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all"
-                  placeholder="Software Engineering Opportunity"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  className="w-full px-4 py-3 bg-white dark:bg-slate-700 dark:text-white border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-teal-600 focus:border-transparent outline-none transition-all resize-none"
-                  placeholder="Please describe how we can collaborate..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-teal-600 to-amber-600 text-white rounded-lg font-medium hover:shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Send size={20} />
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
-          </motion.div>
+            <div className="contact-form-field">
+              <label htmlFor="contact-subject">Subject</label>
+              <input
+                type="text"
+                id="contact-subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                placeholder="Software Engineering Opportunity"
+                autoComplete="off"
+              />
+            </div>
+            <div className="contact-form-field">
+              <label htmlFor="contact-message">Message</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                rows={5}
+                placeholder="Please describe how we can collaborate..."
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="contact-form-submit"
+            >
+              <Send size={18} />
+              {isSubmitting ? "Sending..." : "Send Message"}
+            </button>
+          </form>
         </div>
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default Contact;
