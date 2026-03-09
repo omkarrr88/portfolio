@@ -13,7 +13,7 @@ export const config = {
     },
     about: {
         title: "About Me",
-        description: "I'm a final-year IT student at Terna Engineering College and Platform Engineer at Riamona, where I work on cloud infrastructure and e-commerce platforms. I'm passionate about the intersection of web development and machine learning — I've built projects ranging from a V2V collision simulation to ML-based recommendation engines. VP of CSI & Deputy Secretary of the T&P Cell. I'm actively looking for full-time roles in full-stack development or ML engineering."
+        description: "I am a final-year Information Technology Engineering student at Mumbai University and a Platform Engineer at Riamona Luxury & Fashion Brands. I have hands-on experience building, deploying, and maintaining end-to-end automation systems, full-stack web applications, and ML-powered solutions. My technical expertise spans Python, JavaScript/TypeScript, React, Flask, and cloud infrastructure."
     },
     experiences: [
         {

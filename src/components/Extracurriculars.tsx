@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Users, Sparkles, Briefcase } from "lucide-react";
+import { Users, Sparkles, Briefcase, Trophy } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./styles/Extracurriculars.css";
@@ -30,6 +30,14 @@ const activities = [
     description:
       "Managing hospitality operations for the annual cultural festival, coordinating with teams to ensure a memorable experience for all participants and guests.",
     colorClass: "extra-icon--orange",
+  },
+  {
+    Icon: Trophy,
+    title: "Avishkar Research Competition 2025",
+    role: "Finalist — Mumbai University",
+    description:
+      "Selected as a finalist in Avishkar 2025, one of the most prestigious inter-collegiate research competitions organised by Mumbai University, competing among hundreds of student teams across disciplines. Presented original research demonstrating analytical thinking and structured technical communication.",
+    colorClass: "extra-icon--purple",
   },
 ];
 
