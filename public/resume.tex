@@ -1,0 +1,123 @@
+\documentclass{resume} % Use the custom resume.cls style
+
+\usepackage[left=0.4in,top=0.35in,right=0.4in,bottom=0.35in]{geometry} % Document margins
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}}
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\name{OMKAR KADAM} % Your name
+\address{+91 9987703661 \\ \href{mailto:omkarkadam181188@gmail.com}{omkarkadam181188@gmail.com} \\ Navi Mumbai}
+\address{\href{https://www.linkedin.com/in/omkarrrr}{LinkedIn} \\ \href{https://github.com/omkarrr88}{GitHub} \\ \href{https://omkar-kadam.vercel.app}{Portfolio}}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVE
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{OBJECTIVE}
+
+{I'm a final-year Information Technology student at Terna Engineering College (Mumbai University, BE 2026) and a Platform Engineer at Riamona Luxury \& Fashion Brands, where I build full-stack products end to end -- writing the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. I recently placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon and co-authored a research paper now under review at \textit{Discover Internet of Things} (Springer Nature). I'm looking for a full-stack, platform, or ML engineering role.}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Education}
+
+{\bf Terna Engineering College, Nerul} -- BE Information Technology, Mumbai University \hfill {Nov 2022 -- June 2026}\\
+{\bf D.A.V. Public School, Airoli} -- CBSE 12th Science \hfill {June 2020 -- July 2022}\\
+{\bf D.A.V. Public School, Airoli} -- CBSE 10th \hfill {May 2020}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	WORK EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{EXPERIENCE}
+
+\textbf{Platform Engineer} -- Riamona Luxury and Fashion Brands Pvt. Ltd., \textit{Navi Mumbai} \hfill {Jan 2026 -- Present}
+\begin{itemize}
+    \item Build and ship full-stack features for several internal products using React, Node.js, Python, and PostgreSQL, along with the REST/GraphQL APIs and database schemas behind them
+    \item Write unit, integration, and end-to-end tests for what I build, and maintain the GitHub Actions and Railway pipelines that run them on every push
+    \item Handle deployments, monitoring, and production issues across staging and production, and work with the team to turn requirements into shipped features
+\end{itemize}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Technical Skills}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Languages               & Python, JavaScript, TypeScript, Java, HTML, CSS \\
+ML \& Data              & TensorFlow, Scikit-learn, NLTK, OpenCV, Pandas, NumPy, \\
+                        & Deep Learning, NLP, Computer Vision \\
+Web \& Frameworks       & React, Node.js, Express.js, Flask, Prisma, TailwindCSS, Vite \\
+Databases               & PostgreSQL, MySQL, MongoDB \\
+Cloud \& DevOps         & Google Cloud, AWS, Docker, Railway, Git \\
+APIs \& Integration     & REST APIs, GraphQL, Shopify Admin API, BeautifulSoup \\
+\end{tabular}\\
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	PUBLICATIONS
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{PUBLICATIONS}
+
+\textbf{Vehicle-to-Vehicle Communication for Blind Spot Detection and Accident Prevention Using Severity-Gated Collision Risk Indexing} -- Co-author, manuscript submitted to \textit{Discover Internet of Things} (Springer Nature); currently under peer review. \hfill {April 2026}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	PROJECTS SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{PROJECTS}
+
+\begin{itemize}
+\item \textbf{Vehicle-to-Vehicle Communication for Blind Spot Detection and Accident Prevention Using Severity-Gated Collision Risk Indexing (May 2026):} A simulation where vehicles warn each other about blind spots and likely collisions before they happen. Built the messaging between vehicles, the sensor data processing, and a risk score that decides when to alert the driver. The work became a research paper, now under review at \textit{Discover Internet of Things} (Springer Nature). \href{https://github.com/omkarrr88/V2V}{\textit{GitHub}}
+
+\item \textbf{Smart PUC (May 2026):} A blockchain-based system for monitoring vehicle emissions and PUC compliance in India. OBD devices sign live emission telemetry, testing stations validate it, and the records go on-chain so no single party can fake the data. Tracks all five Bharat Stage VI pollutants with physics-based models and an ML ensemble for fraud detection, and issues emission certificates as NFTs. Built with Solidity smart contracts (Hardhat, OpenZeppelin), a FastAPI/Web3.py backend, and a web dashboard. \href{https://github.com/omkarrr88/Smart_PUC}{\textit{GitHub}}
+
+\item \textbf{Shopify Gold Price Automation System (March 2026):} End-to-end automated pricing engine for a luxury jewellery Shopify store with $\sim$939 products and 55,000+ variants. Scrapes live gold rates from IBJA twice daily, recalculates all variant prices via a component-wise formula (gold weight $\times$ purity rate + diamond weight + making charges), and pushes updates through Shopify GraphQL Bulk Operations API with zero manual steps. Deployed on Railway with Flask, PostgreSQL, and Telegram bot notifications. \textit{(Proprietary)}
+
+\item \textbf{Invoice \& Payment Management Portal (March 2026):} Full-stack enterprise financial platform for invoice tracking, payment scheduling, and UTR verification. Features a slab-based early-payment discount engine, daily interest penalty calculations, bulk Excel invoice import, role-based access (Admin, Customer, Agent, Sub-Agent, Employee), and a payment simulator. Built with React, TypeScript, Express.js, Prisma ORM, and PostgreSQL; deployed on Railway. \textit{(Proprietary)}
+
+\item \textbf{Face Recognition Attendance System (May 2025):} An attendance system that marks students present from a camera feed using face recognition. Built with OpenCV and the face-recognition library, with records stored in MySQL and exported as attendance reports. \href{https://github.com/omkarrr88/face-recognition-attendance-system}{\textit{GitHub}}
+
+\item \textbf{Fitness Tracker Application (Nov 2024):} A web app for logging diet, sleep, and workouts, with a BMI calculator and goal tracking. Uses Chart.js to show progress over time. \href{https://github.com/omkarrr88/Fitness-Tracker}{\textit{GitHub}}
+
+\item \textbf{Movie Recommendation System (May 2024):} A movie recommendation web app built on collaborative filtering. Pulls movie data from the IMDB/TMDB APIs and runs sentiment analysis on user reviews with NLTK. React frontend, Flask backend. \href{https://github.com/omkarrr88/movie-recommendation-system}{\textit{GitHub}}
+\end{itemize}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	LEADERSHIP / EXTRA-CURRICULAR
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Leadership / Extra-Curricular Activities}
+
+\begin{itemize}
+
+    \item {\bf 7th Place -- \href{https://www.scaler.com/school-of-technology/meta-pytorch-hackathon}{Meta PyTorch Hackathon} (Scaler School of Technology):} Placed 7th out of 31,000+ teams. The hackathon ran in two rounds -- an online round with 31,000+ teams, then an offline finals with the top 800. Built \textit{Chakravyuh}, a multi-agent reinforcement learning environment for detecting UPI payment fraud, with LoRA-fine-tuned agents trained in PyTorch using GRPO. \href{https://github.com/UjjwalPardeshi/Chakravyuh}{\textit{GitHub}}
+
+    \item {\bf Finalist -- Avishkar Research Project Competition 2025, Mumbai University:} Reached the finals of Avishkar 2025, Mumbai University's inter-collegiate research competition, presenting the V2V research project against hundreds of teams.
+
+    \item {\bf Computer Society of India, Terna Chapter -- Advisor (Oct 2025 -- Present), Vice Chairperson (Oct 2024 -- Oct 2025), Technical Executive (Nov 2023 -- Oct 2024):} Started as Technical Executive and moved up to Vice Chairperson over 2.5 years. As Vice Chairperson, ran a 40-member team that organised 10+ AI/ML workshops and seminars. Now an Advisor, helping the new committee settle in.
+
+    \item {\bf Training \& Placement Cell, Terna -- Deputy Secretary (Nov 2024 -- Oct 2025), Hospitality Committee Member (Nov 2023 -- Nov 2024):} Joined as a Hospitality Committee Member and was promoted to Deputy Secretary. Worked with 20+ HR professionals and recruiters and organised mock interviews to get students placement-ready.
+
+    \item {\bf Revive Cultural Fest, Terna -- Hospitality HOD (Jan 2025 -- Jan 2026), Senior Member (Jan 2024 -- Jan 2025), Committee Member (Dec 2022 -- Jan 2024):} Worked my way up from Committee Member to Hospitality HOD over 3 years at Revive, the college's cultural fest. As HOD, ran hospitality for 1,000+ attendees and guest judges with a team of 50+ volunteers.
+
+\end{itemize}
+
+\end{rSection}
+
+\end{document}

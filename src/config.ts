@@ -13,33 +13,52 @@ export const config = {
     },
     about: {
         title: "About Me",
-        description: "I am a final-year Information Technology Engineering student at Mumbai University and a Platform Engineer at Riamona Luxury & Fashion Brands. I have hands-on experience building, deploying, and maintaining end-to-end automation systems, full-stack web applications, and ML-powered solutions. My technical expertise spans Python, JavaScript/TypeScript, React, Flask, and cloud infrastructure."
+        description: "I'm a final-year Information Technology student at Terna Engineering College (Mumbai University, BE 2026) and a Platform Engineer at Riamona Luxury & Fashion Brands, where I build full-stack products end to end — the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. I recently placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon and co-authored a research paper now under review at Discover Internet of Things (Springer Nature)."
     },
     experiences: [
         {
             position: "Platform Engineer",
             company: "Riamona Luxury & Fashion Brands",
-            period: "2025 - Present",
-            location: "Mumbai",
-            description: "Building core technology platform, CI/CD pipelines, and cloud-based solutions for luxury fashion e-commerce.",
+            period: "Jan 2026 - Present",
+            location: "Navi Mumbai",
+            description: "Building full-stack products end to end — development, testing, CI/CD, and cloud infrastructure across several internal products.",
             responsibilities: [
-                "Developing and maintaining the core technology platform",
-                "Building CI/CD pipelines and automation",
-                "Implementing cloud-based infrastructure solutions",
-                "Working with cross-functional teams on product delivery"
+                "Build and ship full-stack features with React, Node.js, Python, and PostgreSQL",
+                "Design and maintain REST/GraphQL APIs and database schemas",
+                "Write unit, integration, and end-to-end tests",
+                "Maintain CI/CD pipelines on GitHub Actions and Railway",
+                "Handle deployments, monitoring, and production issues"
             ],
-            technologies: ["Cloud", "CI/CD", "Docker", "Node.js", "React", "DevOps"]
+            technologies: ["React", "Node.js", "Python", "PostgreSQL", "Prisma", "GraphQL", "CI/CD", "Docker", "Railway"]
         }
     ],
     projects: [
         {
             id: 1,
             title: "V2V Communication",
-            category: "IoT / Simulation",
+            category: "IoT / Research",
             technologies: "Python, Simulation, Networking, IoT, Sensor Processing",
             image: "/images/v2v.webp",
-            description: "Vehicle-to-Vehicle communication system for collision detection and avoidance. Uses IoT sensors and simulation to enable real-time communication between vehicles.",
+            description: "A simulation where vehicles warn each other about blind spots and likely collisions before they happen, using a Severity-Gated Collision Risk Indexing approach. The work became a research paper, now under review at Discover Internet of Things (Springer Nature).",
             link: "https://github.com/omkarrr88/V2V"
+        },
+        {
+            id: 7,
+            title: "Smart PUC",
+            category: "Blockchain / ML",
+            technologies: "Solidity, Hardhat, OpenZeppelin, FastAPI, Web3.py, Scikit-learn, Docker",
+            image: "/images/placeholder.webp",
+            description: "A blockchain-based system for monitoring vehicle emissions and PUC compliance in India. OBD devices sign live emission telemetry, testing stations validate it, and records go on-chain so no single party can fake the data. Tracks all five Bharat Stage VI pollutants with physics-based models and an ML ensemble for fraud detection, and issues emission certificates as NFTs.",
+            link: "https://github.com/omkarrr88/Smart_PUC"
+        },
+        {
+            id: 8,
+            title: "Chakravyuh",
+            category: "ML / Reinforcement Learning",
+            technologies: "PyTorch, Hugging Face Transformers, GRPO, LoRA, Qwen2.5, FastAPI, Docker",
+            image: "/images/placeholder.webp",
+            description: "A multi-agent reinforcement learning environment for detecting UPI payment fraud, built for the Meta PyTorch Hackathon (7th out of 31,000+ teams). Five agents with asymmetric information — scammer, victim, analyzer, bank monitor, and regulator — train against each other, with LoRA-fine-tuned models trained in PyTorch using GRPO.",
+            link: "https://github.com/UjjwalPardeshi/Chakravyuh"
         },
         {
             id: 2,
@@ -104,8 +123,8 @@ export const config = {
         design: {
             title: "FULL-STACK",
             description: "Modern web development & scalable applications",
-            details: "Building responsive and performant web applications using React, Node.js, Express, and databases. Creating seamless user experiences with modern UI/UX principles.",
-            tools: ["React", "Node.js", "Express.js", "Flask", "JavaScript", "Java", "MySQL", "MongoDB", "Docker", "Git"]
+            details: "Building responsive, production-grade web applications using React, Node.js, Express, and TypeScript, backed by Prisma and PostgreSQL. Shipping with proper testing, CI/CD, and cloud deployment.",
+            tools: ["React", "Node.js", "Express.js", "TypeScript", "Prisma", "PostgreSQL", "TailwindCSS", "Docker", "Railway", "Git"]
         }
     }
 };

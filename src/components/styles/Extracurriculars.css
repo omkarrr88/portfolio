@@ -97,10 +97,16 @@
   box-shadow: 0 0 20px rgba(240, 192, 64, 0.35);
 }
 
+.extra-icon--gold {
+  background: linear-gradient(135deg, #ffd24a, #ff8a00);
+  box-shadow: 0 0 20px rgba(255, 168, 0, 0.4);
+}
+
 .extra-card:hover .extra-icon--blue,
 .extra-card:hover .extra-icon--green,
 .extra-card:hover .extra-icon--orange,
-.extra-card:hover .extra-icon--purple {
+.extra-card:hover .extra-icon--purple,
+.extra-card:hover .extra-icon--gold {
   box-shadow: 0 0 30px rgba(170, 66, 255, 0.55);
 }
 

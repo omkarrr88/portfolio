@@ -8,11 +8,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 const activities = [
   {
+    Icon: Trophy,
+    title: "Meta PyTorch Hackathon",
+    role: "7th Place — out of 31,000+ teams",
+    description:
+      "Placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon. Built Chakravyuh, a multi-agent reinforcement learning environment for detecting UPI payment fraud, and presented it at the offline finals.",
+    colorClass: "extra-icon--gold",
+  },
+  {
+    Icon: Trophy,
+    title: "Avishkar Research Competition 2025",
+    role: "Finalist — Mumbai University",
+    description:
+      "Reached the finals of Avishkar 2025, Mumbai University's inter-collegiate research competition, presenting the V2V research project against hundreds of teams.",
+    colorClass: "extra-icon--purple",
+  },
+  {
     Icon: Users,
     title: "Computer Society of India (CSI)",
-    role: "Vice Chairperson",
+    role: "Advisor & Former Vice Chairperson",
     description:
-      "Leading technical initiatives, organizing workshops, coding competitions, and fostering a collaborative learning environment for students interested in technology.",
+      "Started as Technical Executive and moved up to Vice Chairperson, leading a 40-member team that organised 10+ AI/ML workshops and seminars. Now an Advisor to the new committee.",
     colorClass: "extra-icon--blue",
   },
   {
@@ -20,7 +36,7 @@ const activities = [
     title: "Training & Placement Cell",
     role: "Deputy Secretary",
     description:
-      "Bridging the gap between industry and academia by organizing placement drives, training sessions, and career development workshops for students.",
+      "Joined as a Hospitality Committee Member and was promoted to Deputy Secretary, working with 20+ HR professionals and recruiters and running mock interviews to get students placement-ready.",
     colorClass: "extra-icon--green",
   },
   {
@@ -28,16 +44,8 @@ const activities = [
     title: "Revive Cultural Fest",
     role: "Hospitality Head",
     description:
-      "Managing hospitality operations for the annual cultural festival, coordinating with teams to ensure a memorable experience for all participants and guests.",
+      "Worked up from Committee Member to Hospitality HOD over 3 years at Revive, the college's cultural fest, running hospitality for 1,000+ attendees with a team of 50+ volunteers.",
     colorClass: "extra-icon--orange",
-  },
-  {
-    Icon: Trophy,
-    title: "Avishkar Research Competition 2025",
-    role: "Finalist — Mumbai University",
-    description:
-      "Selected as a finalist in Avishkar 2025, one of the most prestigious inter-collegiate research competitions organised by Mumbai University, competing among hundreds of student teams across disciplines. Presented original research demonstrating analytical thinking and structured technical communication.",
-    colorClass: "extra-icon--purple",
   },
 ];
 

@@ -17,6 +17,17 @@ const CallToAction = () => {
         >
           Hire Me →
         </a>
+        <a
+          href={config.resume}
+          download="Omkar_Kadam_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cta-btn cta-btn-play"
+          data-cursor="disable"
+          aria-label="Download resume (PDF)"
+        >
+          Download Resume
+        </a>
       </div>
     </section>
   );
