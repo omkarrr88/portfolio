@@ -14,7 +14,7 @@ const education = [
     location: "Navi Mumbai, Maharashtra",
     period: "November 2022 - June 2026",
     description:
-      "Final year student specializing in software engineering, machine learning, and web technologies. Active participant in technical societies and leadership roles.",
+      "Recently graduated with a focus on software engineering, machine learning, and web technologies. Held active leadership roles across technical societies and campus organisations throughout the program.",
   },
   {
     degree: "Higher Secondary Education (CBSE 12th Science)",

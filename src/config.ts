@@ -13,7 +13,7 @@ export const config = {
     },
     about: {
         title: "About Me",
-        description: "I'm a final-year Information Technology student at Terna Engineering College (Mumbai University, BE 2026) and a Platform Engineer at Riamona Luxury & Fashion Brands, where I build full-stack products end to end — the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. I recently placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon and co-authored a research paper now under review at Discover Internet of Things (Springer Nature)."
+        description: "I recently completed my BE in Information Technology from Terna Engineering College (Mumbai University, 2026), and I work as a Platform Engineer at Riamona Luxury & Fashion Brands, where I build full-stack products end to end — the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. I recently placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon and co-authored a research paper now under review at Discover Internet of Things (Springer Nature)."
     },
     experiences: [
         {
