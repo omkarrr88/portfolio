@@ -1,6 +1,14 @@
 .section-container {
   width: 1300px;
 }
+
+/* Keep anchor-jump targets clear of the fixed navbar */
+#about,
+#work,
+#contact,
+#extracurriculars {
+  scroll-margin-top: 110px;
+}
 .title,
 .para {
   font-kerning: normal;

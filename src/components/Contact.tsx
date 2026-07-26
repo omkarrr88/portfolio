@@ -100,6 +100,10 @@ const Contact = () => {
             <p>
               <span>{config.social.location}</span>
             </p>
+            <h4>Availability</h4>
+            <p>
+              <span>Full-time roles &middot; full-stack / platform / ML</span>
+            </p>
           </div>
           <div className="contact-box">
             <h4>Social</h4>

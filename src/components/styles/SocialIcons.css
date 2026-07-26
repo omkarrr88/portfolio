@@ -40,6 +40,7 @@
   transform: translate(-50%, -50%);
   display: flex;
   font-size: 23px;
+  color: #cfc9d6;
   will-change: left, top;
   transition: transform 0.3s ease-out;
 }
@@ -56,7 +57,7 @@
   font-size: 15px;
   line-height: 15px;
   font-weight: 600;
-  color: #b6aec0;
+  color: #d6d0dd;
   cursor: pointer;
   transition: 0.5s;
   transform-origin: left bottom;
