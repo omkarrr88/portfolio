@@ -18,12 +18,16 @@ const setLighting = (scene: THREE.Scene) => {
   pointLight.castShadow = true;
   scene.add(pointLight);
 
+  // If the HDR finishes loading after turnOnLights() has already run, it must
+  // not reset the intensity back to 0 — that race left the character unlit on
+  // slow connections.
+  let lightsOn = false;
   new RGBELoader()
     .setPath("/models/")
     .load("char_enviorment.hdr", function (texture) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
-      scene.environmentIntensity = 0;
+      scene.environmentIntensity = lightsOn ? 0.64 : 0;
       scene.environmentRotation.set(5.76, 85.85, 1);
     });
 
@@ -37,6 +41,7 @@ const setLighting = (scene: THREE.Scene) => {
   const duration = 2;
   const ease = "power2.inOut";
   function turnOnLights() {
+    lightsOn = true;
     gsap.to(scene, {
       environmentIntensity: 0.64,
       duration: duration,
