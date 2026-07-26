@@ -24,7 +24,7 @@
 .contact-flex h4 {
   font-weight: 500;
   margin: 0;
-  opacity: 0.6;
+  opacity: 0.82;
   font-size: 14px;
 }
 .contact-box {
@@ -169,13 +169,41 @@ a.contact-social {
   padding-top: 50px;
 }
 
+/* Two-column desktop layout: info left, form right */
+@media only screen and (min-width: 1000px) {
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr minmax(420px, 520px);
+    column-gap: 80px;
+    align-items: start;
+  }
+  .contact-container > h3 {
+    grid-column: 1 / -1;
+  }
+  .contact-flex {
+    grid-column: 1;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .contact-form-wrapper {
+    grid-column: 2;
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+    border-left: 1px solid #363636;
+    padding-left: 60px;
+    max-width: none;
+    width: 100%;
+  }
+}
+
 .contact-form-title {
   font-size: 18px;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0 0 30px 0;
-  opacity: 0.7;
+  opacity: 0.9;
   color: #eae5ec;
 }
 
@@ -196,7 +224,7 @@ a.contact-social {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: rgba(234, 229, 236, 0.45);
+  color: rgba(234, 229, 236, 0.78);
 }
 
 .contact-form-field input,
@@ -236,7 +264,7 @@ a.contact-social {
 
 .contact-form-field input::placeholder,
 .contact-form-field textarea::placeholder {
-  color: rgba(234, 229, 236, 0.2);
+  color: rgba(234, 229, 236, 0.38);
 }
 
 .contact-form-field input:focus,

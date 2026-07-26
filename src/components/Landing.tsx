@@ -1,6 +1,5 @@
 import { PropsWithChildren } from "react";
 import "./styles/Landing.css";
-import { config } from "../config";
 
 const Landing = ({ children }: PropsWithChildren) => {
   return (
@@ -19,10 +18,10 @@ const Landing = ({ children }: PropsWithChildren) => {
           <div className="landing-info">
             <h3>An</h3>
             <h2 className="landing-info-h2">
-              <div className="landing-h2-1">ML Engineer</div>
+              <div className="landing-h2-1">Full-Stack Dev</div>
             </h2>
             <h2>
-              <div className="landing-h2-info">Full-Stack Dev</div>
+              <div className="landing-h2-info">ML Engineer</div>
             </h2>
           </div>
           <div className="mobile-photo">

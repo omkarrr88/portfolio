@@ -182,10 +182,10 @@
   position: fixed;
   top: 0;
   width: 100%;
-  height: 130px;
+  height: 160px;
   background-image: linear-gradient(0deg,
       transparent,
-      var(--backgroundColor) 70%);
+      var(--backgroundColor) 82%);
   pointer-events: none;
   z-index: 12;
   opacity: 0;
