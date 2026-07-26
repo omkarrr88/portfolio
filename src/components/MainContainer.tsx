@@ -7,7 +7,7 @@ import Cursor from "./Cursor";
 import Education from "./Education";
 import Extracurriculars from "./Extracurriculars";
 import Landing from "./Landing";
-import Navbar from "./Navbar";
+import Navbar, { lenis } from "./Navbar";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
@@ -21,6 +21,23 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     window.innerWidth > 1024
   );
   const [isMobile] = useState<boolean>(window.innerWidth <= 768);
+
+  useEffect(() => {
+    // Runs after Navbar's effect (child effects fire first), so Lenis exists
+    // by the time initialFX starts it — avoids the lazy-chunk race that left
+    // the page in a lenis-stopped state.
+    import("./utils/initialFX").then((module) => {
+      setTimeout(() => {
+        module.initialFX();
+      }, 100);
+    });
+    // Failsafe: if anything in initialFX throws, never leave scroll locked.
+    const unlock = window.setTimeout(() => {
+      document.body.style.overflowY = "auto";
+      lenis?.start();
+    }, 1200);
+    return () => window.clearTimeout(unlock);
+  }, []);
 
   useEffect(() => {
     const resizeHandler = () => {

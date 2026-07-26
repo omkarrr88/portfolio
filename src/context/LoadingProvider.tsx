@@ -2,7 +2,6 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -23,16 +22,6 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     setIsLoading,
     setLoading,
   };
-
-  useEffect(() => {
-    import("../components/utils/initialFX").then((module) => {
-      if (module.initialFX) {
-        setTimeout(() => {
-          module.initialFX();
-        }, 100);
-      }
-    });
-  }, []);
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
