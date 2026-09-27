@@ -15,7 +15,7 @@
 
 \begin{rSection}{OBJECTIVE}
 
-{I recently completed my BE in Information Technology from Terna Engineering College (Mumbai University, 2026), and I work as a Full Stack Engineer at Riamona Luxury \& Fashion Brands, where I build full-stack products end to end -- writing the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. I recently placed 7th out of 31,000+ teams at the Meta PyTorch Hackathon and co-authored a research paper now under review at \textit{Discover Internet of Things} (Springer Nature). I'm looking for a full-stack, platform, or ML engineering role.}
+{I recently completed my BE in Information Technology from Terna Engineering College (Mumbai University, 2026), and I work as a Full Stack Engineer at Riamona Luxury \& Fashion Brands, where I build full-stack products end to end -- writing the code, the tests, the CI/CD, and running them in production. Day to day I work with React, Node.js, Python, Prisma, and PostgreSQL. In 2026 I placed 7th of 31,000+ teams at the Meta PyTorch Hackathon, top 10 of 15,000+ at the ET AI Hackathon 2.0, and top 7 of 7,000+ at the iQOO Hackathon Pune City Battle, and co-authored a research paper now under review at \textit{Discover Internet of Things} (Springer Nature). I'm looking for full-stack, platform, or ML engineering roles.}
 
 \end{rSection}
 
@@ -53,18 +53,43 @@
 \begin{rSection}{Technical Skills}
 
 \begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
-Languages               & Python, JavaScript, TypeScript, Java, SQL, HTML, CSS \\
-AI Engineering          & RAG, LLM APIs, MCP, LangChain, pgvector \\
-ML \& Data              & PyTorch, TensorFlow, Scikit-learn, NLTK, OpenCV, Pandas, NumPy, Streamlit, \\
-                        & Deep Learning, NLP, Computer Vision \\
+Languages               & Python, JavaScript, TypeScript, Kotlin, Java, SQL, HTML, CSS \\
+AI Engineering          & RAG, LLM APIs, MCP, LangChain, LangGraph, pgvector, OpenEnv, Gradio, \\
+                        & Hugging Face (Transformers, TRL, PEFT, Spaces), LoRA and GRPO fine-tuning \\
+ML \& Data              & PyTorch, TensorFlow, Scikit-learn, NLTK, OpenCV, MediaPipe, Pandas, NumPy, \\
+                        & Streamlit, Deep Learning, NLP, Computer Vision, Reinforcement Learning \\
 Web \& Frameworks       & React, Next.js, Node.js, Express.js, NestJS, Flask, FastAPI, Prisma, \\
                         & TailwindCSS, Vite, Three.js, WebSockets \\
-Databases               & PostgreSQL, MySQL, MongoDB, Supabase, Redis, SQLAlchemy \\
-Cloud \& DevOps         & Google Cloud, AWS, Docker, Railway, GitHub Actions, Git \\
+Mobile                  & Android, Jetpack Compose, CameraX, Room, Firebase (Auth, Firestore) \\
+Databases               & PostgreSQL, PostGIS, MySQL, MongoDB, Supabase, Redis, SQLAlchemy \\
+Cloud \& DevOps         & Google Cloud, AWS, Docker, Railway, Vercel, GitHub Actions, Git \\
 APIs \& Integration     & REST APIs, GraphQL, JWT, OAuth, Shopify Admin API, BeautifulSoup \\
 Blockchain              & Solidity, Web3.js, Hardhat \\
 Testing \& Monitoring   & pytest, Vitest, Playwright, Sentry \\
 \end{tabular}\\
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	PROJECTS SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{PROJECTS}
+
+\begin{itemize}
+\item \textbf{VayuNetra -- AI-Powered Urban Air Quality Intelligence (August 2026):} A LangGraph multi-agent platform that turns air quality readings into attributed, delivered interventions across 10 Indian cities (top 10 of 15,000+ teams, ET AI Hackathon 2.0): per-km\textsuperscript{2} PM2.5 source attribution (GBM + SHAP), 72-hour calibrated forecasts, RAG-cited enforcement dossiers with draft notice PDFs, and citizen advisories in 8 languages over app, Telegram, and IVR -- 16,529 modeled cells on zero-cost infrastructure. \href{https://github.com/omkarrr88/VayuNetra}{\textit{GitHub}}
+
+\item \textbf{Chakravyuh -- Multi-Agent RL for UPI Fraud Detection (April 2026):} A five-agent OpenEnv RL environment (scammer, victim, analyzer, bank monitor, regulator) for UPI fraud (7th of 31,000+ teams, Meta PyTorch Hackathon). A Qwen2.5-7B analyzer fine-tuned with LoRA and GRPO reaches 99.3\% detection at 6.7\% false positives (36\% before a reward-hacking fix), statistically tied with Llama-3.3-70B at 10$\times$ fewer parameters. Built the evaluation suite (frontier baselines, significance tests, leakage audit) and the Gradio demo. \href{https://github.com/omkarrr88/Chakravyuh}{\textit{GitHub}}
+
+\item \textbf{Fitmon -- Camera-Refereed Fitness Game (September 2026):} An Android fitness game where the front camera grades every rep (top 7 of 7,000+ teams, iQOO Pune City Battle). On-device MediaPipe pose tracking scores depth, range, tempo, and alignment, turned into damage against an adaptive boss; an on-device Gemma 3n coach cites only measured data. Kotlin, Jetpack Compose, CameraX, Room, Firebase; 836 JVM tests. \href{https://github.com/omkarrr88/ClashFit}{\textit{GitHub}}
+
+\item \textbf{PyTorch Training Run Debugger (April 2026):} An OpenEnv RL environment (Meta PyTorch Hackathon, Round 1) where AI agents debug broken training runs: 7 real failures (exploding/vanishing gradients, data leakage, overfitting, BatchNorm in eval mode, training-loop bugs, bad LR schedules), with rewards gated on what the agent has inspected. FastAPI, WebSockets, Hugging Face Spaces; 245 tests, 95\% coverage. \href{https://github.com/omkarrr88/PyTorch-Training-Run-Debugger}{\textit{GitHub}}
+
+\item \textbf{V2V Communication for Blind Spot Detection and Accident Prevention (May 2026):} A simulation where vehicles warn each other about blind spots and likely collisions before they happen. Built the messaging between vehicles, the sensor data processing, and a risk score that decides when to alert the driver. The work became a research paper, now under review at \textit{Discover Internet of Things} (Springer Nature). \href{https://github.com/omkarrr88/V2V}{\textit{GitHub}}
+
+\item \textbf{Smart PUC (May 2026):} A blockchain-based system for monitoring vehicle emissions and PUC compliance in India. OBD devices sign live emission telemetry, testing stations validate it, and the records go on-chain so no single party can fake the data. Tracks all five Bharat Stage VI pollutants with physics-based models and an ML ensemble for fraud detection, and issues emission certificates as NFTs. Built with Solidity smart contracts (Hardhat, OpenZeppelin), a FastAPI/Web3.py backend, and a web dashboard. \href{https://github.com/omkarrr88/Smart_PUC}{\textit{GitHub}}
+
+\end{itemize}
 
 \end{rSection}
 
@@ -79,32 +104,6 @@ Testing \& Monitoring   & pytest, Vitest, Playwright, Sentry \\
 \end{rSection}
 
 %----------------------------------------------------------------------------------------
-%	PROJECTS SECTION
-%----------------------------------------------------------------------------------------
-
-\begin{rSection}{PROJECTS}
-
-\begin{itemize}
-\item \textbf{VayuNetra -- AI-Powered Urban Air Quality Intelligence (July 2026):} A six-agent AI platform that turns air quality readings into attributed, delivered interventions across Delhi, Bengaluru, and Mumbai. Does per-km\textsuperscript{2} PM2.5 source attribution (GBM + SHAP), 72-hour calibrated forecasts, RAG-cited enforcement dossiers with draft notice PDFs, and citizen advisories in 4 languages over app, Telegram, and IVR calls -- 6,394 modeled cells running on zero-cost infrastructure. \href{https://github.com/omkarrr88/VayuNetra}{\textit{GitHub}}
-
-\item \textbf{Vehicle-to-Vehicle Communication for Blind Spot Detection and Accident Prevention Using Severity-Gated Collision Risk Indexing (May 2026):} A simulation where vehicles warn each other about blind spots and likely collisions before they happen. Built the messaging between vehicles, the sensor data processing, and a risk score that decides when to alert the driver. The work became a research paper, now under review at \textit{Discover Internet of Things} (Springer Nature). \href{https://github.com/omkarrr88/V2V}{\textit{GitHub}}
-
-\item \textbf{Smart PUC (May 2026):} A blockchain-based system for monitoring vehicle emissions and PUC compliance in India. OBD devices sign live emission telemetry, testing stations validate it, and the records go on-chain so no single party can fake the data. Tracks all five Bharat Stage VI pollutants with physics-based models and an ML ensemble for fraud detection, and issues emission certificates as NFTs. Built with Solidity smart contracts (Hardhat, OpenZeppelin), a FastAPI/Web3.py backend, and a web dashboard. \href{https://github.com/omkarrr88/Smart_PUC}{\textit{GitHub}}
-
-\item \textbf{Shopify Gold Price Automation System (March 2026):} End-to-end automated pricing engine for a luxury jewellery Shopify store with $\sim$939 products and 55,000+ variants. Scrapes live gold rates from IBJA twice daily, recalculates all variant prices via a component-wise formula (gold weight $\times$ purity rate + diamond weight + making charges), and pushes updates through Shopify GraphQL Bulk Operations API with zero manual steps. Deployed on Railway with Flask, PostgreSQL, and Telegram bot notifications. \textit{(Proprietary)}
-
-\item \textbf{Invoice \& Payment Management Portal (March 2026):} Full-stack enterprise financial platform for invoice tracking, payment scheduling, and UTR verification. Features a slab-based early-payment discount engine, daily interest penalty calculations, bulk Excel invoice import, role-based access (Admin, Customer, Agent, Sub-Agent, Employee), and a payment simulator. Built with React, TypeScript, Express.js, Prisma ORM, and PostgreSQL; deployed on Railway. \textit{(Proprietary)}
-
-\item \textbf{Face Recognition Attendance System (May 2025):} An attendance system that marks students present from a camera feed using face recognition. Built with OpenCV and the face-recognition library, with records stored in MySQL and exported as attendance reports. \href{https://github.com/omkarrr88/face-recognition-attendance-system}{\textit{GitHub}}
-
-\item \textbf{Fitness Tracker Application (Nov 2024):} A web app for logging diet, sleep, and workouts, with a BMI calculator and goal tracking. Uses Chart.js to show progress over time. \href{https://github.com/omkarrr88/Fitness-Tracker}{\textit{GitHub}}
-
-\item \textbf{Movie Recommendation System (May 2024):} A movie recommendation web app built on collaborative filtering. Pulls movie data from the IMDB/TMDB APIs and runs sentiment analysis on user reviews with NLTK. React frontend, Flask backend. \href{https://github.com/omkarrr88/movie-recommendation-system}{\textit{GitHub}}
-\end{itemize}
-
-\end{rSection}
-
-%----------------------------------------------------------------------------------------
 %	LEADERSHIP / EXTRA-CURRICULAR
 %----------------------------------------------------------------------------------------
 
@@ -112,15 +111,19 @@ Testing \& Monitoring   & pytest, Vitest, Playwright, Sentry \\
 
 \begin{itemize}
 
-    \item {\bf 7th Place -- \href{https://www.scaler.com/school-of-technology/meta-pytorch-hackathon}{Meta PyTorch Hackathon} (Scaler School of Technology):} Placed 7th out of 31,000+ teams. The hackathon ran in two rounds -- an online round with 31,000+ teams, then an offline finals with the top 800. Built \textit{Chakravyuh}, a multi-agent reinforcement learning environment for detecting UPI payment fraud, with LoRA-fine-tuned agents trained in PyTorch using GRPO. \href{https://github.com/UjjwalPardeshi/Chakravyuh}{\textit{GitHub}}
+    \item {\bf 7th Place -- \href{https://www.scaler.com/school-of-technology/meta-pytorch-hackathon}{Meta PyTorch Hackathon} (Scaler School of Technology, Bengaluru, Apr 2026):} Out of 31,000+ teams: online round with \textit{PyTorch Training Run Debugger}, offline finals (top 800) with \textit{Chakravyuh}.
 
-    \item {\bf Finalist -- Avishkar Research Project Competition 2025, Mumbai University:} Reached the finals of Avishkar 2025, Mumbai University's inter-collegiate research competition, presenting the V2V research project against hundreds of teams.
+    \item {\bf Top 10 -- \href{https://economictimes.indiatimes.com/et-ai-hackathon/2nd-edition}{ET AI Hackathon 2.0} (The Economic Times, Hyderabad, Aug 2026):} Placed in the top 10 of 15,000+ teams with \textit{VayuNetra}, presented at the Hyderabad finale.
 
-    \item {\bf Computer Society of India, Terna Chapter -- Advisor (Oct 2025 -- Present), Vice Chairperson (Oct 2024 -- Oct 2025), Technical Executive (Nov 2023 -- Oct 2024):} Started as Technical Executive and moved up to Vice Chairperson over 2.5 years. As Vice Chairperson, ran a 40-member team that organised 10+ AI/ML workshops and seminars. Now an Advisor, helping the new committee settle in.
+    \item {\bf Top 7 -- \href{https://iqoo.reskilll.com/}{iQOO Hackathon 2026, Pune City Battle} (iQOO, Pune, Sept 2026):} Placed in the top 7 of 7,000+ teams in the HealthTech track with \textit{Fitmon}.
 
-    \item {\bf Training \& Placement Cell, Terna -- Deputy Secretary (Nov 2024 -- Oct 2025), Hospitality Committee Member (Nov 2023 -- Nov 2024):} Joined as a Hospitality Committee Member and was promoted to Deputy Secretary. Worked with 20+ HR professionals and recruiters and organised mock interviews to get students placement-ready.
+    \item {\bf Finalist -- Avishkar Research Project Competition 2025, Mumbai University:} Reached the finals of Mumbai University's inter-collegiate research competition with the V2V research project.
 
-    \item {\bf Revive Cultural Fest, Terna -- Hospitality HOD (Jan 2025 -- Jan 2026), Senior Member (Jan 2024 -- Jan 2025), Committee Member (Dec 2022 -- Jan 2024):} Worked my way up from Committee Member to Hospitality HOD over 3 years at Revive, the college's cultural fest. As HOD, ran hospitality for 1,000+ attendees and guest judges with a team of 50+ volunteers.
+    \item {\bf Computer Society of India, Terna Chapter -- Advisor (Oct 2025 -- Present), Vice Chairperson (Oct 2024 -- Oct 2025), Technical Executive (Nov 2023 -- Oct 2024):} Rose to Vice Chairperson, leading a 40-member team that ran 10+ AI/ML workshops and seminars.
+
+    \item {\bf Training \& Placement Cell, Terna -- Deputy Secretary (Nov 2024 -- Oct 2025), Hospitality Committee Member (Nov 2023 -- Nov 2024):} Worked with 20+ recruiters and ran mock interviews to get students placement-ready.
+
+    \item {\bf Revive Cultural Fest, Terna -- Hospitality HOD (Jan 2025 -- Jan 2026), Senior Member (Jan 2024 -- Jan 2025), Committee Member (Dec 2022 -- Jan 2024):} Ran hospitality for 1,000+ attendees and guest judges with 50+ volunteers.
 
 \end{itemize}
 

@@ -47,6 +47,12 @@
   border-bottom: 1px solid #363636;
 }
 
+.extra-grid--four {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
 .extra-card {
   padding: 40px 36px;
   border-right: 1px solid #363636;
@@ -145,6 +151,20 @@
   font-weight: 300;
 }
 
+@media only screen and (max-width: 1200px) {
+  .extra-grid--four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .extra-grid--four .extra-card:nth-child(-n + 2) {
+    border-bottom: 1px solid #363636;
+  }
+
+  .extra-grid--four .extra-card:nth-child(2n) {
+    border-right: none;
+  }
+}
+
 @media only screen and (max-width: 900px) {
   .extra-section {
     padding: 60px 0;
@@ -161,7 +181,8 @@
     margin-bottom: 50px;
   }
 
-  .extra-grid {
+  .extra-grid,
+  .extra-grid--four {
     grid-template-columns: 1fr;
     border-left: none;
     border-right: none;
