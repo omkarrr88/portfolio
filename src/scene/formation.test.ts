@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  CENTRE,
   RING_COUNT,
   RING_GROWTH,
   activeRingForStage,
@@ -60,9 +61,14 @@ describe('activeRingForStage', () => {
     expect(activeRingForStage(1.51)).toBe(5)
   })
 
-  it('clamps to the valid ring range', () => {
+  it('reaches the centre (0) after the innermost ring', () => {
+    expect(activeRingForStage(6)).toBe(1)
+    expect(activeRingForStage(7)).toBe(CENTRE)
+  })
+
+  it('clamps to the valid range, outer ring to centre', () => {
     expect(activeRingForStage(-3)).toBe(7)
-    expect(activeRingForStage(99)).toBe(1)
+    expect(activeRingForStage(99)).toBe(CENTRE)
   })
 })
 

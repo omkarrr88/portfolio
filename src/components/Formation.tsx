@@ -54,7 +54,12 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
         lastRing = activeRing
         label.textContent = `${pad(activeRing)} — ${chapterForRing(activeRing).label}`
       }
-      const point = projectPlanePoint({ x: 0, y: RINGS[activeRing - 1].radius }, camera)
+      const ring = RINGS[activeRing - 1]
+      if (!ring) {
+        label.style.opacity = '0'
+        return
+      }
+      const point = projectPlanePoint({ x: 0, y: ring.radius }, camera)
       if (!point) return
       label.style.transform = `translate3d(${point.x.toFixed(1)}px, ${point.y.toFixed(1)}px, 0) translate(-50%, -150%)`
       // On narrow screens the outer ring's label would collide with the hero text.

@@ -37,10 +37,13 @@ export function buildRings(): Ring[] {
   }))
 }
 
-/** Stage 0 frames ring 7; each whole stage moves one ring inward. */
+/** The centre of the formation, reached one stage after the innermost ring. */
+export const CENTRE = 0
+
+/** Stage 0 frames ring 7; each whole stage moves one ring inward; stage 7 is the centre. */
 export function activeRingForStage(stage: number): number {
   const ring = RING_COUNT - Math.round(stage)
-  return Math.min(RING_COUNT, Math.max(1, ring))
+  return Math.min(RING_COUNT, Math.max(CENTRE, ring))
 }
 
 export type Vec3 = readonly [number, number, number]
