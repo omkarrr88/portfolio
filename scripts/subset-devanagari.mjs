@@ -5,7 +5,8 @@ import subsetFont from 'subset-font'
 
 const SOURCE = 'node_modules/@fontsource/tiro-devanagari-sanskrit/files/tiro-devanagari-sanskrit-devanagari-400-normal.woff2'
 const TARGET = 'src/assets/fonts/tiro-devanagari-subset.woff2'
-const TEXT = 'चक्रव्यूह'
+// Every Devanagari word on the site: the formation's name and VayuNetra's.
+const TEXT = 'चक्रव्यूह वायुनेत्र'
 
 const source = await readFile(SOURCE)
 const subset = await subsetFont(source, TEXT, { targetFormat: 'woff2' })

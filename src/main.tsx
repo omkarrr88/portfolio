@@ -7,7 +7,10 @@ import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
 import './styles/tokens.css'
 import './styles/base.css'
-import './styles/layout.css'
+import './styles/frame.css'
+import './styles/chapters.css'
+import './styles/sheets.css'
+import './styles/centre.css'
 import App from './App.tsx'
 
 const root = document.getElementById('root')

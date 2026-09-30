@@ -1,11 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Formation } from './components/Formation'
 import { Hud } from './components/Hud'
 import { IndexPanel } from './components/IndexPanel'
-import { Hero, NowChapter, ProjectSheet, PrototypeEnd } from './components/Sections'
+import { Beyond } from './components/sections/Beyond'
+import { Centre } from './components/sections/Centre'
+import { Intro } from './components/sections/Intro'
+import { MoreWork } from './components/sections/MoreWork'
+import { Now } from './components/sections/Now'
+import { ProjectChapter } from './components/sections/ProjectChapter'
+import { chakravyuh, fitmon, vayunetra } from './content/projects'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion'
 import { useScrollStage, type StageListener } from './hooks/useScrollStage'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
+
+/** Analytics only report from the deployed site, not from local or LAN previews. */
+const isDeployed = (host: string) => !/^(localhost|127\.0\.0\.1|\d+\.\d+\.\d+\.\d+)$/.test(host)
 
 export default function App() {
   const reducedMotion = usePrefersReducedMotion()
@@ -13,11 +24,20 @@ export default function App() {
   const [indexOpen, setIndexOpen] = useState(false)
 
   const mainRef = useRef<HTMLElement>(null)
-  const heroRef = useRef<HTMLElement>(null)
+  const introRef = useRef<HTMLElement>(null)
   const nowRef = useRef<HTMLElement>(null)
-  const sheetRef = useRef<HTMLElement>(null)
+  const chakravyuhRef = useRef<HTMLElement>(null)
+  const vayunetraRef = useRef<HTMLElement>(null)
+  const fitmonRef = useRef<HTMLElement>(null)
+  const moreRef = useRef<HTMLElement>(null)
+  const beyondRef = useRef<HTMLElement>(null)
+  const centreRef = useRef<HTMLElement>(null)
   const formationRef = useRef<StageListener>(null)
-  const sections = useMemo(() => [heroRef, nowRef, sheetRef], [])
+  // One section per stage, outer ring to centre.
+  const sections = useMemo(
+    () => [introRef, nowRef, chakravyuhRef, vayunetraRef, fitmonRef, moreRef, beyondRef, centreRef],
+    [],
+  )
 
   const activeRing = useScrollStage(sections, formationRef)
 
@@ -60,17 +80,29 @@ export default function App() {
     [scrollTo],
   )
 
+  const toTop = useCallback(() => scrollTo(0), [scrollTo])
+
   return (
     <>
       <Formation ref={formationRef} reducedMotion={reducedMotion} />
-      <Hud activeRing={activeRing} onOpenIndex={() => setIndexOpen(true)} onHome={() => scrollTo(0)} />
-      <IndexPanel open={indexOpen} onClose={() => setIndexOpen(false)} onNavigate={navigate} />
+      <Hud activeRing={activeRing} onOpenIndex={() => setIndexOpen(true)} onHome={toTop} />
+      <IndexPanel open={indexOpen} activeRing={activeRing} onClose={() => setIndexOpen(false)} onNavigate={navigate} />
       <main ref={mainRef}>
-        <Hero ref={heroRef} />
-        <NowChapter ref={nowRef} />
-        <ProjectSheet ref={sheetRef} />
-        <PrototypeEnd />
+        <Intro ref={introRef} />
+        <Now ref={nowRef} />
+        <ProjectChapter ref={chakravyuhRef} ring={5} project={chakravyuh} tilt="right" />
+        <ProjectChapter ref={vayunetraRef} ring={4} project={vayunetra} tilt="left" />
+        <ProjectChapter ref={fitmonRef} ring={3} project={fitmon} tilt="right" />
+        <MoreWork ref={moreRef} />
+        <Beyond ref={beyondRef} />
+        <Centre ref={centreRef} onTop={toTop} />
       </main>
+      {isDeployed(window.location.hostname) ? (
+        <>
+          <Analytics />
+          <SpeedInsights />
+        </>
+      ) : null}
     </>
   )
 }

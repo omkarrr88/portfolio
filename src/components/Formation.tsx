@@ -1,8 +1,9 @@
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react'
 import type { RingScene, FrameInfo } from '../scene/RingScene'
 import { buildRings, projectPlanePoint } from '../scene/formation'
-import { chapterForRing } from '../content/site'
+import { chapterForRing, pad } from '../content/chapters'
 import type { StageListener } from '../hooks/useScrollStage'
+import { clearance, type Span } from '../scroll/dim'
 
 interface FormationProps {
   readonly reducedMotion: boolean
@@ -10,7 +11,8 @@ interface FormationProps {
 }
 
 const RINGS = buildRings()
-const pad = (n: number) => String(n).padStart(2, '0')
+/** The label fades out as it nears a block of text, fully gone this many px away. */
+const LABEL_CLEARANCE_PX = 56
 
 /** Fades the ring label out mid-transition and back in once a ring has settled. */
 const labelOpacity = (stage: number) => {
@@ -20,13 +22,15 @@ const labelOpacity = (stage: number) => {
 
 /**
  * The fixed WebGL backdrop plus the label that rides on the active ring.
- * three.js is loaded after first paint so the text is readable immediately.
+ * The scene is loaded after first paint so the text is readable immediately.
  */
 export function Formation({ reducedMotion, ref }: FormationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<RingScene | null>(null)
   const lastStage = useRef(0)
+  const lastDim = useRef(0)
+  const textBlocks = useRef<readonly Span[]>([])
   const [failed, setFailed] = useState(false)
 
   useImperativeHandle(
@@ -37,6 +41,13 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
         sceneRef.current?.setTargetStage(lastStage.current)
       },
       onVelocity: (v) => sceneRef.current?.setVelocity(v),
+      onDim: (amount) => {
+        lastDim.current = amount
+        sceneRef.current?.setDim(amount)
+      },
+      onTextBlocks: (blocks) => {
+        textBlocks.current = blocks
+      },
     }),
     [reducedMotion],
   )
@@ -64,7 +75,8 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
       label.style.transform = `translate3d(${point.x.toFixed(1)}px, ${point.y.toFixed(1)}px, 0) translate(-50%, -150%)`
       // On narrow screens the outer ring's label would collide with the hero text.
       const hidden = reducedMotion || (activeRing === 7 && camera.width < 700)
-      label.style.opacity = hidden ? '0' : labelOpacity(stage).toFixed(3)
+      const room = clearance(window.scrollY + point.y - 10, textBlocks.current, LABEL_CLEARANCE_PX)
+      label.style.opacity = hidden ? '0' : (labelOpacity(stage) * room).toFixed(3)
     }
 
     const onPointer = (event: PointerEvent) => {
@@ -84,6 +96,7 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
         const scene = new RingScene(canvas, { reducedMotion, onFrame, onError })
         scene.resize(canvas.clientWidth, canvas.clientHeight)
         scene.setTargetStage(lastStage.current)
+        scene.setDim(lastDim.current)
         sceneRef.current = scene
         resizeObserver.observe(canvas)
         canvas.dataset.ready = 'true'

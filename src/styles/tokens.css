@@ -2,15 +2,19 @@
 :root {
   color-scheme: dark;
   --bg: #0b0a09;
+  --bg-veil: rgba(11, 10, 9, 0.72);
   --ink: #ece7de;
   --ink-2: #a8a297;
   /* --ink-3 is the dimmest colour allowed for text (5:1 on --bg); --ink-4 is for dividers only. */
   --ink-3: #85807a;
   --ink-4: #4f4a43;
-  --line: rgba(236, 231, 222, 0.16);
+  --line: rgba(236, 231, 222, 0.14);
+  --line-strong: rgba(236, 231, 222, 0.28);
   --accent: #ec4f2d;
 
   --paper: #ebe6dc;
+  /* A shade darker, for the band behind phone screens. */
+  --paper-2: #ddd6c8;
   --paper-ink: #151311;
   --paper-ink-2: #5b554c;
   --paper-line: rgba(21, 19, 17, 0.16);
@@ -21,11 +25,14 @@
   --font-deva: 'Tiro Devanagari Sanskrit', 'Noto Serif Devanagari', serif;
 
   --gutter: clamp(16px, 4vw, 48px);
+  --content: 1120px;
   --hud-h: 60px;
+  --sheet-pad: clamp(20px, 3.6vw, 52px);
+  --headline: clamp(31px, 4.2vw, 58px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Subset built by scripts/subset-devanagari.mjs: only the glyphs of चक्रव्यूह. */
+/* Subset built by scripts/subset-devanagari.mjs: only the glyphs the site uses. */
 @font-face {
   font-family: 'Tiro Devanagari Sanskrit';
   src: url('../assets/fonts/tiro-devanagari-subset.woff2') format('woff2');

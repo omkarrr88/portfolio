@@ -1,0 +1,446 @@
+/* Paper: the project sheets (rings 05–03), the More work ledger (ring 02). */
+
+/* ---------- Project opening: the problem, set over the formation ---------- */
+
+.project__open {
+  position: relative;
+  margin-bottom: clamp(64px, 13svh, 150px);
+}
+
+.project__hook {
+  max-width: 21ch;
+  font-size: var(--headline);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+/* ---------- The sheet ---------- */
+
+.sheet,
+.ledger {
+  position: relative;
+  padding: var(--sheet-pad);
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 60px 140px -50px rgba(0, 0, 0, 0.95),
+    0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.sheet::before,
+.ledger::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 72px;
+  height: 4px;
+  background: var(--accent);
+}
+
+.sheet ::selection,
+.ledger ::selection {
+  background: var(--paper-ink);
+  color: var(--paper);
+}
+
+.sheet :focus-visible,
+.ledger :focus-visible {
+  outline-color: var(--accent-on-paper);
+}
+
+.sheet__meta,
+.ledger__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin-bottom: clamp(28px, 5vw, 56px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--paper-line);
+  font: 500 11px/1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.sheet__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 20px;
+}
+
+.sheet__title {
+  margin-left: -0.04em;
+  font-weight: 600;
+  font-size: clamp(52px, 10vw, 136px);
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+}
+
+.sheet__deva {
+  font: 400 clamp(24px, 3.2vw, 44px)/1.2 var(--font-deva);
+  color: var(--accent-on-paper);
+}
+
+.sheet__subtitle {
+  max-width: 30ch;
+  margin: 22px 0 10px;
+  font-size: clamp(19px, 2vw, 27px);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+}
+
+.sheet__placement {
+  margin-bottom: clamp(28px, 4.5vw, 52px);
+  font: 500 12px/1.5 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-on-paper);
+}
+
+/* ---------- Figures ---------- */
+
+.figure {
+  margin-bottom: clamp(28px, 4.5vw, 52px);
+}
+
+.figure__frame {
+  overflow: hidden;
+}
+
+.figure figcaption {
+  max-width: 64ch;
+  margin-top: 12px;
+  font: 400 12px/1.55 var(--font-mono);
+  color: var(--paper-ink-2);
+}
+
+/* Charts are white images: give them a white mat so they read as prints on the paper. */
+.figure--chart .figure__frame {
+  padding: clamp(8px, 1.4vw, 18px);
+  background: #fff;
+  border: 1px solid var(--paper-line);
+}
+
+/* Screens run edge to edge across the sheet. */
+.figure--screen .figure__frame {
+  margin-inline: calc(-1 * var(--sheet-pad));
+  border-block: 1px solid var(--paper-line);
+}
+
+.figure--screen figcaption {
+  margin-top: 14px;
+}
+
+/* Phone screens stand in a row on a darker band. */
+.figure--phones .figure__frame {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 3vw, 44px);
+  margin-inline: calc(-1 * var(--sheet-pad));
+  padding: clamp(22px, 4.5vw, 60px) clamp(14px, 7vw, 110px) clamp(16px, 3vw, 36px);
+  background: var(--paper-2);
+}
+
+.figure--phones .figure__item img {
+  border-radius: clamp(10px, 1.8vw, 24px);
+  box-shadow:
+    0 0 0 1px rgba(21, 19, 17, 0.35),
+    0 24px 40px -18px rgba(21, 19, 17, 0.55);
+}
+
+.figure__label {
+  display: block;
+  margin-top: 12px;
+  font: 500 10px/1.3 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--paper-ink-2);
+}
+
+/* ---------- Key numbers ---------- */
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: clamp(32px, 5vw, 56px);
+  border-top: 1px solid var(--paper-ink);
+}
+
+.numbers__item {
+  padding: 16px 16px 18px 0;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.numbers__item:nth-child(2n) {
+  padding-left: 16px;
+  border-left: 1px solid var(--paper-line);
+}
+
+@media (min-width: 900px) {
+  .numbers:not(.numbers--compact) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .numbers:not(.numbers--compact) .numbers__item {
+    padding: 18px 20px 0;
+    border-bottom: 0;
+    border-left: 1px solid var(--paper-line);
+  }
+
+  .numbers:not(.numbers--compact) .numbers__item:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.numbers__value {
+  font-size: clamp(28px, 3.4vw, 46px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.numbers__label {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--paper-ink-2);
+}
+
+/* ---------- Text columns, facts, links ---------- */
+
+.sheet__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .sheet__columns {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+    gap: 56px;
+  }
+}
+
+.sheet__body p {
+  max-width: 36em;
+  margin-bottom: 16px;
+  font-size: 17px;
+  line-height: 1.62;
+}
+
+.facts {
+  border-top: 1px solid var(--paper-line);
+}
+
+.facts__row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.facts dt {
+  font: 500 11px/1.6 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.facts dd {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.facts__row--mine dt {
+  color: var(--accent-on-paper);
+}
+
+.facts__row--mine dd {
+  font-weight: 500;
+}
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.paper-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-ink);
+  transition: background 0.3s, color 0.3s;
+}
+
+.paper-button:hover {
+  background: var(--paper-ink);
+  color: var(--paper);
+}
+
+.paper-button--solid {
+  background: var(--paper-ink);
+  color: var(--paper);
+}
+
+.paper-button--solid:hover {
+  background: var(--accent-on-paper);
+  border-color: var(--accent-on-paper);
+}
+
+.paper-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ---------- Ring 02: the ledger ---------- */
+
+.ledger__head {
+  justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  padding: clamp(32px, 5vw, 56px) 0;
+  border-bottom: 1px solid var(--paper-line);
+  /* Anchor jumps land below the HUD. */
+  scroll-margin-top: calc(var(--hud-h) + 24px);
+}
+
+.entry:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.entry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  font: 500 11px/1.5 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.entry__index {
+  font: 500 28px/1 var(--font-display);
+  letter-spacing: -0.03em;
+  color: var(--paper-ink);
+}
+
+.entry__placement {
+  color: var(--accent-on-paper);
+}
+
+.entry__title {
+  font-size: clamp(27px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.entry__subtitle {
+  margin: 10px 0 20px;
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--paper-ink-2);
+}
+
+.entry__text {
+  max-width: 38em;
+  margin-bottom: 14px;
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+.entry__main .facts {
+  margin-top: 22px;
+}
+
+.entry__aside {
+  min-width: 0;
+}
+
+.entry__aside .numbers {
+  margin-bottom: 24px;
+}
+
+.entry__aside .figure {
+  margin-bottom: 0;
+}
+
+.numbers--compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 1000px) {
+  .entry {
+    grid-template-columns: 150px minmax(0, 1fr) 290px;
+    gap: 44px;
+  }
+
+  .entry__meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .numbers--compact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .numbers--compact .numbers__item,
+  .numbers--compact .numbers__item:nth-child(2n) {
+    padding: 14px 0 16px;
+    border-left: 0;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 999px) {
+  .entry {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 22px 36px;
+  }
+
+  .entry__meta {
+    grid-column: 1 / -1;
+  }
+
+  .numbers--compact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .numbers--compact .numbers__item,
+  .numbers--compact .numbers__item:nth-child(2n) {
+    padding: 14px 0 16px;
+    border-left: 0;
+  }
+}
+
+.numbers--compact .numbers__value {
+  font-size: clamp(26px, 2.6vw, 34px);
+}
+
+.numbers--compact .numbers__value {
+  white-space: normal;
+}

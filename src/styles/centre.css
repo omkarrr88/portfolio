@@ -1,0 +1,259 @@
+/* The centre: contact, the letter form, the colophon. The formation sits right of this on wide screens, above it on phones. */
+
+.centre {
+  position: relative;
+  padding: 34svh var(--gutter) 0;
+}
+
+.centre__inner {
+  width: min(100%, var(--content));
+  margin-inline: auto;
+}
+
+/* Keep the text clear of the formation, which sits to the right at the centre. */
+.centre__inner > * {
+  max-width: min(520px, 100%);
+}
+
+@media (min-width: 900px) and (orientation: landscape) {
+  .centre__inner > * {
+    max-width: min(500px, 44vw);
+  }
+}
+
+.centre .chapter-head {
+  margin-bottom: 48px;
+}
+
+.centre__contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding-bottom: 28px;
+}
+
+.centre__email {
+  font-size: clamp(20px, 2.3vw, 30px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 4px;
+  transition: color 0.3s, background-size 0.5s var(--ease-out);
+}
+
+.centre__email:hover {
+  color: var(--accent);
+}
+
+.centre__copy {
+  min-height: 44px;
+  padding: 0 14px;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.centre__copy:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.centre__links {
+  border-bottom: 1px solid var(--line);
+}
+
+.centre__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.centre__link-label {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  transition: color 0.3s, transform 0.5s var(--ease-out);
+}
+
+.centre__link:hover .centre__link-label {
+  color: var(--accent);
+  transform: translateX(6px);
+}
+
+.centre__link-handle {
+  font: 400 12px/1 var(--font-mono);
+  color: var(--ink-3);
+}
+
+.centre__link .arrow {
+  color: var(--ink-3);
+}
+
+.centre__letter {
+  margin-top: clamp(72px, 12svh, 140px);
+}
+
+/* ---------- The letter: a contact form on paper ---------- */
+
+.letter {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  padding: var(--sheet-pad);
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 50px 120px -50px rgba(0, 0, 0, 0.95);
+}
+
+.letter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 4px;
+  background: var(--accent);
+}
+
+.letter :focus-visible {
+  outline-color: var(--accent-on-paper);
+}
+
+.letter__eyebrow {
+  font: 500 11px/1.4 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.letter__done {
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field__label {
+  font: 500 11px/1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 17px;
+  line-height: 1.45;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--paper-ink-2);
+  border-radius: 0;
+  transition: border-color 0.3s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--paper-ink);
+  box-shadow: 0 1px 0 var(--paper-ink);
+}
+
+.field.has-error input,
+.field.has-error textarea {
+  border-bottom-color: var(--accent-on-paper);
+}
+
+.field__error {
+  font-size: 14px;
+  color: var(--accent-on-paper);
+}
+
+.letter__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.letter__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.letter__status {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.letter__status a {
+  color: var(--accent-on-paper);
+}
+
+/* ---------- Colophon ---------- */
+
+.colophon {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  width: min(100%, var(--content));
+  margin: clamp(120px, 22svh, 220px) auto 0;
+  padding: 24px 0 calc(var(--hud-h) + env(safe-area-inset-bottom) + 28px);
+  border-top: 1px solid var(--line);
+  font: 400 11px/1.6 var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.colophon__note {
+  max-width: 60ch;
+}
+
+.colophon__top {
+  justify-self: start;
+  min-height: 44px;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition: color 0.3s;
+}
+
+.colophon__top:hover {
+  color: var(--accent);
+}
+
+@media (min-width: 900px) {
+  .colophon {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 32px;
+    align-items: baseline;
+  }
+}

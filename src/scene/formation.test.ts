@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import {
+  BASE_PITCH,
   CENTRE,
+  FINALE_PITCH,
   RING_COUNT,
   RING_GROWTH,
   activeRingForStage,
   buildRings,
   cameraBasis,
+  cameraForStage,
+  centreFrame,
+  finaleProgress,
   frameRadiusPx,
   projectPlanePoint,
   worldZoomForViewport,
+  zoomExponentForRadius,
   type CameraParams,
 } from './formation'
 
@@ -152,5 +158,77 @@ describe('frameRadiusPx and worldZoomForViewport', () => {
       const p = projectPlanePoint({ x: 1, y: 0 }, topDown({ width, height, zoom, pitch: 0.7 }))!
       expect(p.x - width / 2).toBeCloseTo(frameRadiusPx(width, height), 6)
     }
+  })
+})
+
+describe('finaleProgress', () => {
+  it('stays 0 while diving through the rings', () => {
+    expect(finaleProgress(0)).toBe(0)
+    expect(finaleProgress(RING_COUNT - 1)).toBe(0)
+  })
+
+  it('eases from the innermost ring to the centre and holds there', () => {
+    expect(finaleProgress(RING_COUNT - 0.5)).toBeCloseTo(0.5, 10)
+    expect(finaleProgress(RING_COUNT)).toBe(1)
+    expect(finaleProgress(RING_COUNT + 3)).toBe(1)
+  })
+})
+
+describe('centreFrame', () => {
+  it('puts the formation right of the text on a laptop and keeps it on screen', () => {
+    const f = centreFrame(1440, 900)
+    expect(f.offsetX).toBeGreaterThan(0)
+    expect(f.offsetY).toBe(0)
+    expect(1440 / 2 + f.offsetX + f.radius).toBeLessThan(1440)
+    expect(f.radius).toBeLessThan(900 / 2)
+  })
+
+  it('lifts the formation above the text on a phone and keeps it on screen', () => {
+    const f = centreFrame(390, 844)
+    expect(f.offsetX).toBe(0)
+    expect(f.offsetY).toBeLessThan(0)
+    expect(844 / 2 + f.offsetY - f.radius).toBeGreaterThan(60)
+    expect(f.radius * 2).toBeLessThan(390)
+  })
+})
+
+describe('zoomExponentForRadius', () => {
+  it('is 0 for the stage-0 framing radius and negative for anything smaller', () => {
+    expect(zoomExponentForRadius(frameRadiusPx(1440, 900), 1440, 900)).toBeCloseTo(0, 10)
+    expect(zoomExponentForRadius(frameRadiusPx(1440, 900) / RING_GROWTH, 1440, 900)).toBeCloseTo(-1, 10)
+  })
+})
+
+describe('cameraForStage', () => {
+  it('dives one ring step per stage on the way in', () => {
+    for (const stage of [0, 1, 2.5, 6]) {
+      const cam = cameraForStage(stage, 1440, 900)
+      expect(cam.zoomExponent).toBeCloseTo(stage, 10)
+      expect(cam.pitch).toBeCloseTo(BASE_PITCH, 10)
+      expect(cam.finale).toBe(0)
+    }
+  })
+
+  it('pulls back and looks down at the centre', () => {
+    const cam = cameraForStage(RING_COUNT, 1440, 900)
+    const frame = centreFrame(1440, 900)
+    expect(cam.pitch).toBeCloseTo(FINALE_PITCH, 10)
+    expect(cam.zoomExponent).toBeCloseTo(zoomExponentForRadius(frame.radius, 1440, 900), 10)
+    expect(cam.offsetX).toBeCloseTo(frame.offsetX, 10)
+  })
+
+  it('is continuous where the finale starts', () => {
+    const before = cameraForStage(RING_COUNT - 1 - 1e-6, 390, 844)
+    const after = cameraForStage(RING_COUNT - 1 + 1e-6, 390, 844)
+    expect(after.zoomExponent).toBeCloseTo(before.zoomExponent, 4)
+    expect(after.pitch).toBeCloseTo(before.pitch, 4)
+  })
+})
+
+describe('projectPlanePoint with an offset', () => {
+  it('shifts the projected centre by the offset', () => {
+    const p = projectPlanePoint({ x: 0, y: 0 }, topDown({ offsetX: 120, offsetY: -40 }))
+    expect(p?.x).toBeCloseTo(500 + 120, 6)
+    expect(p?.y).toBeCloseTo(400 - 40, 6)
   })
 })

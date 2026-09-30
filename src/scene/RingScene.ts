@@ -2,6 +2,7 @@ import {
   RING_GROWTH,
   activeRingForStage,
   buildRings,
+  cameraForStage,
   frameRadiusPx,
   worldZoomForViewport,
   type CameraParams,
@@ -10,7 +11,6 @@ import { fragmentShader, vertexShader } from './shaders'
 import { GLError, createFullScreenTriangle, createProgram, uniformLocations, type UniformLocations } from './gl'
 import { palette } from '../theme/palette'
 
-const BASE_PITCH = 0.74
 const DISTANCE = 4
 const FOCAL = 2
 const MAX_PIXEL_RATIO = 2
@@ -19,18 +19,25 @@ const FRAME_SAMPLE = 90
 /** Dust cells per plane unit when the frame ring is this many CSS px wide. */
 const DUST_PER_UNIT = 26
 const DUST_REFERENCE_FRAME_PX = 594
+/** How long the rings take to draw themselves in on load. */
+const INTRO_SECONDS = 2.4
 
 const UNIFORMS = [
   'uResolution',
   'uPixelRatio',
   'uTime',
   'uStage',
+  'uZoomExp',
   'uPitch',
   'uYaw',
   'uDistance',
   'uFocal',
   'uWorldZoom',
+  'uOffset',
   'uActive',
+  'uIntro',
+  'uDim',
+  'uFinale',
   'uDustDensity',
   'uBg',
   'uInk',
@@ -89,6 +96,9 @@ export class RingScene {
   private smoothY = 0
   private velocityTilt = 0
   private targetVelocityTilt = 0
+  private dim = 0
+  private targetDim = 0
+  private intro = 0
   private elapsed = 0
   private lastTime = 0
   // Ring buffer of recent frame times; mutated in place so the render loop never allocates.
@@ -131,6 +141,11 @@ export class RingScene {
   setPointer(x: number, y: number): void {
     this.pointerX = x
     this.pointerY = y
+  }
+
+  /** 0..1: how far the reader is inside a block of text; the formation steps back. */
+  setDim(amount: number): void {
+    this.targetDim = Math.min(1, Math.max(0, amount))
   }
 
   /** Scroll velocity in px per ms; tilts the formation slightly while moving. */
@@ -238,12 +253,15 @@ export class RingScene {
 
     const ease = (rate: number) => 1 - Math.exp(-dt * rate)
     this.stage = reduced ? this.targetStage : this.stage + (this.targetStage - this.stage) * ease(6)
+    this.dim = reduced ? this.targetDim : this.dim + (this.targetDim - this.dim) * ease(3)
+    this.intro = reduced ? 1 : Math.min(1, this.intro + dt / INTRO_SECONDS)
     this.smoothX += (this.pointerX - this.smoothX) * ease(3)
     this.smoothY += (this.pointerY - this.smoothY) * ease(3)
     this.velocityTilt += (this.targetVelocityTilt - this.velocityTilt) * ease(4)
     this.targetVelocityTilt *= 1 - ease(3)
 
-    const pitch = BASE_PITCH + (reduced ? 0 : this.smoothY * 0.05 + this.velocityTilt)
+    const view = cameraForStage(this.stage, this.width, this.height)
+    const pitch = view.pitch + (reduced ? 0 : this.smoothY * 0.05 * (1 - view.finale) + this.velocityTilt)
     const yaw = reduced ? 0 : this.smoothX * 0.07
     const activeRing = activeRingForStage(this.stage)
     const u = gpu.uniforms
@@ -251,10 +269,15 @@ export class RingScene {
     gl.useProgram(gpu.program)
     gl.uniform1f(u.uTime, this.elapsed)
     gl.uniform1f(u.uStage, this.stage)
+    gl.uniform1f(u.uZoomExp, view.zoomExponent)
     gl.uniform1f(u.uPitch, pitch)
     gl.uniform1f(u.uYaw, yaw)
     gl.uniform1f(u.uWorldZoom, this.worldZoom)
+    gl.uniform2f(u.uOffset, view.offsetX, view.offsetY)
     gl.uniform1f(u.uActive, activeRing)
+    gl.uniform1f(u.uIntro, this.intro)
+    gl.uniform1f(u.uDim, this.dim)
+    gl.uniform1f(u.uFinale, view.finale)
     gl.bindVertexArray(gpu.vao)
     gl.drawArrays(gl.TRIANGLES, 0, 3)
 
@@ -266,9 +289,11 @@ export class RingScene {
         yaw,
         distance: DISTANCE,
         focal: FOCAL,
-        zoom: this.worldZoom * Math.pow(RING_GROWTH, this.stage),
+        zoom: this.worldZoom * Math.pow(RING_GROWTH, view.zoomExponent),
         width: this.width,
         height: this.height,
+        offsetX: view.offsetX,
+        offsetY: view.offsetY,
       },
     })
   }
