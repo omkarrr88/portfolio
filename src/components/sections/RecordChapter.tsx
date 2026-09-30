@@ -1,3 +1,4 @@
+import { record } from '../../content/copy'
 import { achievements, publication } from '../../content/profile'
 import { projectById } from '../../content/projects'
 import { BrandMarks } from '../BrandMarks'
@@ -14,8 +15,8 @@ export function RecordChapter() {
         ring={4}
         label="Record"
         titleId="record-title"
-        title="Three hackathon results in 2026, and a paper under review."
-        lede="Plus a finalist place in Mumbai University’s research competition. Open any of them for the story and the project behind it."
+        title={record.title()}
+        lede={record.lede()}
       />
       <ul className="results" data-stagger data-quiet>
         {achievements.map((a) => (

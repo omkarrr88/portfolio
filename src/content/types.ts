@@ -35,6 +35,8 @@ export interface Project {
   readonly title: string
   /** Shorter name for breadcrumbs and the ring label, when the title is long. */
   readonly short?: string
+  /** Shown large in the Work chapter; the rest sit in the smaller row beneath. */
+  readonly featured?: boolean
   readonly subtitle: string
   readonly category: string
   readonly date: string
@@ -54,6 +56,8 @@ export interface Project {
 export interface Experience {
   readonly role: string
   readonly org: string
+  /** The organisation's everyday name, for headlines and labels. */
+  readonly short: string
   readonly place: string
   readonly period: string
   readonly points: readonly string[]
@@ -81,11 +85,18 @@ export interface WonWith {
 export interface Achievement {
   /** URL slug: /record/<id>. */
   readonly id: string
+  /** Hackathons lead the site (the hero, the chapter headlines); other competitions follow them. */
+  readonly kind: 'hackathon' | 'competition'
   /** Short name for labels and breadcrumbs. */
   readonly short: string
   readonly result: string
+  /** The size of the field, when it's worth saying: "of 31,000+ teams". */
   readonly field?: string
   readonly event: string
+  /** The event's name where space is tight, when the full one runs long. */
+  readonly eventShort?: string
+  /** How the Record chapter mentions a competition result in passing: "a finalist place in …". */
+  readonly aside?: string
   readonly organiser: string
   readonly place: string
   readonly date: string
@@ -120,10 +131,19 @@ export interface Publication {
   readonly role: string
   readonly venue: string
   readonly status: string
+  /** Where it is in publishing; drives how headlines describe it. */
+  readonly stage: 'under-review' | 'accepted' | 'published'
   readonly date: string
   readonly projectId: string
 }
 
+/** Something I take on as freelance or contract work, with the projects that show it. */
+export interface Service {
+  readonly title: string
+  readonly detail: string
+  /** Project ids (/work/<id>) that prove it; may be empty. */
+  readonly proof: readonly string[]
+}
 
 /** A chapter of the home scroll. */
 export interface Chapter {

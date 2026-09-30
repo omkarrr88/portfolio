@@ -1,5 +1,5 @@
 import { achievements, publication } from '../content/profile'
-import { projectById, v2v } from '../content/projects'
+import { projectById } from '../content/projects'
 import { Block } from '../components/Block'
 import { BrandMarks } from '../components/BrandMarks'
 import { ExternalLink } from '../components/ExternalLink'
@@ -10,6 +10,8 @@ import { metaFor } from '../router/meta'
 
 const ITEMS = [...achievements.map((a) => ({ id: a.id, label: a.short })), { id: publication.id, label: publication.short }]
 const toCrumb = (item: { id: string; label: string }) => ({ label: item.label, href: `/record/${item.id}` })
+const paperProject = projectById(publication.projectId)
+const PAPER_STAGE = { 'under-review': 'Under review', accepted: 'Accepted', published: 'Published' } as const
 
 /** One result, or the paper: what happened, and the project behind it. */
 export function RecordPage({ id, ring }: { readonly id: string; readonly ring: number }) {
@@ -26,7 +28,7 @@ export function RecordPage({ id, ring }: { readonly id: string; readonly ring: n
         <header className="record-head record-head--paper" data-quiet>
           <Marker ring={ring} crumbs={crumbs} />
           <p className="record-head__result record-head__result--small" data-reveal>
-            Under review
+            {PAPER_STAGE[publication.stage]}
           </p>
           <h1 id="record-page-title" className="record-head__title record-head__title--long" data-split tabIndex={-1}>
             {publication.title}
@@ -44,7 +46,7 @@ export function RecordPage({ id, ring }: { readonly id: string; readonly ring: n
           </Block>
           <Block id="paper-work" label="The work behind it">
             <div className="cards" data-stagger>
-              <ProjectCard project={v2v} note="Research, May 2026" />
+              {paperProject ? <ProjectCard project={paperProject} note={`Research, ${paperProject.date}`} /> : null}
             </div>
           </Block>
         </div>

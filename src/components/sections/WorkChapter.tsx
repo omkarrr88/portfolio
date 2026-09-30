@@ -1,8 +1,17 @@
+import type { CSSProperties } from 'react'
+import { work } from '../../content/copy'
 import { featured, moreWork } from '../../content/projects'
 import { ChapterHead } from '../ChapterHead'
 import { LargeProjectTile, SmallProjectTile } from '../Tiles'
 
-/** Ring 06: every project on one screen, the three hackathon builds large and the other three beneath. */
+/**
+ * Columns for the featured builds: up to three across on a laptop (four as two pairs rather than three and one),
+ * up to four across on a wide screen.
+ */
+const featuredColumns = (count: number): CSSProperties =>
+  ({ '--cols': count === 4 ? 2 : Math.max(1, Math.min(count, 3)), '--cols-wide': Math.max(1, Math.min(count, 4)) }) as CSSProperties
+
+/** Ring 06: every project, the featured builds large and the rest in the row beneath. */
 export function WorkChapter() {
   return (
     <section id="work" className="chapter chapter--screen" aria-labelledby="work-title" data-chapter data-stage={1}>
@@ -10,10 +19,15 @@ export function WorkChapter() {
         ring={6}
         label="Work"
         titleId="work-title"
-        title="Six builds, three hackathon results."
-        lede="Chakravyuh, VayuNetra and Fitmon placed against 31,000, 15,000 and 7,000 teams. Open any project for the full write-up."
+        title={work.title()}
+        lede={work.lede()}
       />
-      <ul className="tiles tiles--large" data-stagger data-quiet>
+      <ul
+        className="tiles tiles--large"
+        style={featuredColumns(featured.length)}
+        data-stagger
+        data-quiet
+      >
         {featured.map((p, i) => (
           <li key={p.id}>
             <LargeProjectTile project={p} index={i} />

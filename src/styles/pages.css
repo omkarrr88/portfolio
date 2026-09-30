@@ -166,9 +166,17 @@
 }
 
 .marker__link {
+  position: relative;
   color: var(--ink-2);
   text-decoration: none;
   transition: color 0.3s;
+}
+
+/* A finger-sized target around a small label, without changing how it looks. */
+.marker__link::after {
+  content: '';
+  position: absolute;
+  inset: -16px -8px;
 }
 
 .marker__link:hover {
@@ -310,7 +318,7 @@
 }
 
 .page-foot__dir {
-  font: 500 10px/1.4 var(--font-mono);
+  font: 500 11px/1.4 var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);

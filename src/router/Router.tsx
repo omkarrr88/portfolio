@@ -51,8 +51,12 @@ function resolve(pathname: string, rawHash: string): { path: string; hash: strin
 /** The address as it should read. */
 const addressOf = (path: string, hash: string) => `${path}${hash ? `#${hash}` : ''}`
 
-/** First load: an old-style section address is rewritten to its chapter before anything renders. */
-function initialLocation(): Location {
+/**
+ * First load: an old-style section address is rewritten to its chapter before anything renders.
+ * At build time there's no window; the page being prerendered says where it is.
+ */
+function initialLocation(serverPath?: string): Location {
+  if (typeof window === 'undefined') return { path: normalisePath(serverPath ?? HOME), hash: '', kind: 'initial', scrollY: 0 }
   const { path, hash } = resolve(window.location.pathname, window.location.hash)
   if (normalisePath(window.location.pathname) !== path) {
     window.history.replaceState(window.history.state, '', addressOf(path, hash))
@@ -63,12 +67,14 @@ function initialLocation(): Location {
 interface RouterProviderProps {
   /** Scrolls within the current page: to an element id, or to the top when null. */
   readonly onSamePage: (hash: string | null) => void
+  /** The page being prerendered at build time; the browser's own address is used otherwise. */
+  readonly serverPath?: string
   readonly children: ReactNode
 }
 
 /** History-API routing: real URLs, working Back/Forward, /#chapter links into the home scroll, no library. */
-export function RouterProvider({ onSamePage, children }: RouterProviderProps) {
-  const [location, setLocation] = useState<Location>(initialLocation)
+export function RouterProvider({ onSamePage, serverPath, children }: RouterProviderProps) {
+  const [location, setLocation] = useState<Location>(() => initialLocation(serverPath))
   // Where the reader was in the home scroll, so the way back home lands there rather than at the top.
   const homeScroll = useRef(0)
   const samePage = useRef(onSamePage)

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { capitalise, listJoin, numberWord } from '../content/copy'
 import type { Role } from '../content/types'
 import { achievements, education, experience, leadership, person, publication, skills } from '../content/profile'
 import { pad } from '../lib/format'
@@ -180,7 +181,7 @@ const ToolkitBody = (
 
 const SHELLS: Record<AboutId, Shell> = {
   riamona: {
-    title: `${job.role} at Riamona`,
+    title: `${job.role} at ${job.short}`,
     lede: `${job.org}, ${job.place}. ${job.period}.`,
     body: JobBody,
   },
@@ -190,8 +191,8 @@ const SHELLS: Record<AboutId, Shell> = {
     body: TernaBody,
   },
   leadership: {
-    title: 'Three committees at Terna, from member to lead.',
-    lede: 'Computer Society of India, the Training & Placement Cell, and the Revive cultural fest.',
+    title: `${capitalise(numberWord(leadership.length))} committees at Terna, from member to lead.`,
+    lede: `${listJoin(leadership.map((l) => l.org.split(',')[0]))}.`,
     body: LeadershipBody,
   },
   toolkit: {

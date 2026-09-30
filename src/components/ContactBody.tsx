@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { person } from '../content/profile'
+import { person, services } from '../content/profile'
+import { projectById } from '../content/projects'
+import { Link } from '../router/Router'
 import { ContactForm } from './ContactForm'
 import { ExternalLink } from './ExternalLink'
 
 const COPIED_MS = 2200
 
-/** Email with a copy button, the three links, and the letter form: the centre, in the scroll and on /contact. */
+/** Email with a copy button, the three links, what I take on as freelance work, and the letter form: the centre. */
 export function ContactBody() {
   const [copied, setCopied] = useState(false)
   const timer = useRef<number | undefined>(undefined)
@@ -58,10 +60,47 @@ export function ContactBody() {
         </ul>
       </div>
 
+      <Services />
+
       <div className="centre__letter" data-dense="narrow">
         <ContactForm />
       </div>
     </>
+  )
+}
+
+/** Freelance and contract work: what I take on, each with the projects that show it. */
+function Services() {
+  return (
+    <section className="services" aria-labelledby="services-title" data-dense="narrow">
+      <div className="services__head" data-reveal>
+        <h3 id="services-title" className="services__title">
+          Work with me
+        </h3>
+        <p className="services__lede">Freelance or contract, quoted per project. Tell me what you’re building.</p>
+      </div>
+      <ul className="services__list" data-stagger>
+        {services.map((service) => (
+          <li key={service.title} className="service">
+            <h4 className="service__title">{service.title}</h4>
+            <p className="service__detail">{service.detail}</p>
+            {service.proof.length > 0 ? (
+              <p className="service__proof">
+                <span className="service__proof-label">Seen in</span>
+                {service.proof.map((id) => {
+                  const p = projectById(id)
+                  return p ? (
+                    <Link key={id} to={`/work/${id}`} className="service__proof-link">
+                      {p.short ?? p.title}
+                    </Link>
+                  ) : null
+                })}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -80,5 +119,3 @@ export function Colophon({ back }: { readonly back: ReactNode }) {
     </footer>
   )
 }
-
-export const lookingForLede = `I’m looking for ${person.lookingFor.charAt(0).toLowerCase()}${person.lookingFor.slice(1)} Email is the quickest way to reach me.`

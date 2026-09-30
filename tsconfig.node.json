@@ -13,6 +13,8 @@
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
+    /* The contact function is plain JS (api/contact.js); its tests import it. */
+    "allowJs": true,
 
     /* Linting */
     "noUnusedLocals": true,

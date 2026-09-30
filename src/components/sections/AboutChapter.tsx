@@ -1,3 +1,4 @@
+import { about } from '../../content/copy'
 import { education, experience, leadership, person, skills } from '../../content/profile'
 import { ChapterHead } from '../ChapterHead'
 import { TileLink } from '../Tiles'
@@ -15,8 +16,8 @@ export function AboutChapter() {
         ring={2}
         label="About"
         titleId="about-title"
-        title="I build full-stack products at Riamona."
-        lede="Full Stack Engineer since January 2026: the code, the tests, the CI/CD, and running it all in production. Alongside it, a degree at Terna, three committees, and the tools I use."
+        title={about.title()}
+        lede={about.lede()}
       />
       <ul className="about-grid" data-stagger data-quiet>
         <li className="about-grid__job">
@@ -31,7 +32,7 @@ export function AboutChapter() {
         </li>
         <li>
           <TileLink to="/about/terna" className="about-tile">
-            <span className="about-tile__kind">Education · 2022 – 2026</span>
+            <span className="about-tile__kind">Education · {about.degreeYears()}</span>
             <h3 className="about-tile__title">{degree.title}</h3>
             <span className="about-tile__line">
               {degree.school} · {degree.place}
@@ -58,7 +59,7 @@ export function AboutChapter() {
       </ul>
       <p className="chapter__aside" data-reveal>
         Looking for {person.lookingFor.charAt(0).toLowerCase()}
-        {person.lookingFor.slice(1)}
+        {person.lookingFor.slice(1, -1)}, and open to freelance and contract work.
       </p>
     </section>
   )

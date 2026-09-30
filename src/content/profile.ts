@@ -1,5 +1,5 @@
 import type { BrandId } from './brands'
-import type { Achievement, Education, Experience, Leadership, Publication, SkillGroup } from './types'
+import type { Achievement, Education, Experience, Leadership, Publication, Service, SkillGroup } from './types'
 
 /** Every fact here is taken from public/resume.tex; keep the two in step. */
 
@@ -14,12 +14,17 @@ export const person = {
   linkedin: 'https://www.linkedin.com/in/omkarrrr',
   resume: '/resume.pdf',
   lookingFor: 'Full-stack, platform and ML engineering roles.',
+  /** Said plainly at the top of the site and again at the contact. */
+  availability: 'Open to full-time roles, freelance and contract work.',
+  /** The reply-time promise at the contact and after the form is sent. */
+  replyWithin: '24 hours',
 } as const
 
 export const experience: readonly Experience[] = [
   {
     role: 'Full Stack Engineer',
     org: 'Riamona Luxury and Fashion Brands Pvt. Ltd.',
+    short: 'Riamona',
     place: 'Navi Mumbai',
     period: 'Jan 2026 – Present',
     points: [
@@ -77,6 +82,7 @@ export const skills: readonly SkillGroup[] = [
 export const achievements: readonly Achievement[] = [
   {
     id: 'meta-pytorch',
+    kind: 'hackathon',
     brands: ['meta', 'pytorch'],
     short: 'Meta PyTorch',
     result: '7th',
@@ -93,6 +99,7 @@ export const achievements: readonly Achievement[] = [
   },
   {
     id: 'et-ai',
+    kind: 'hackathon',
     brands: ['economic-times'],
     short: 'ET AI Hackathon',
     result: 'Top 10',
@@ -107,11 +114,13 @@ export const achievements: readonly Achievement[] = [
   },
   {
     id: 'iqoo',
+    kind: 'hackathon',
     brands: ['iqoo'],
     short: 'iQOO Hackathon',
     result: 'Top 7',
     field: 'of 7,000+ teams',
     event: 'iQOO Hackathon 2026, Pune City Battle',
+    eventShort: 'iQOO Hackathon 2026',
     organiser: 'iQOO',
     place: 'Pune',
     date: 'Sept 2026',
@@ -121,6 +130,8 @@ export const achievements: readonly Achievement[] = [
   },
   {
     id: 'avishkar',
+    kind: 'competition',
+    aside: 'a finalist place in Mumbai University’s research competition',
     brands: [],
     short: 'Avishkar',
     result: 'Finalist',
@@ -176,9 +187,37 @@ export const publication: Publication = {
   role: 'Co-author',
   venue: 'Discover Internet of Things (Springer Nature)',
   status: 'Submitted, under peer review',
+  stage: 'under-review',
   date: 'April 2026',
   projectId: 'v2v',
 }
+
+/** What I take on as freelance or contract work, each with the projects that show it. */
+export const services: readonly Service[] = [
+  {
+    title: 'Full-stack web apps',
+    detail:
+      'Web products from the database up: React or Next.js front ends, Node.js or FastAPI back ends, PostgreSQL, auth, deployed and monitored.',
+    proof: ['vayunetra'],
+  },
+  {
+    title: 'AI and ML features',
+    detail:
+      'LLM agents and RAG over your own data, fine-tuning and evaluating models, and the pipelines that put them inside a product.',
+    proof: ['chakravyuh', 'vayunetra', 'debugger'],
+  },
+  {
+    title: 'Android apps',
+    detail: 'Native Android in Kotlin and Jetpack Compose, including on-device ML with the camera (CameraX, MediaPipe).',
+    proof: ['fitmon'],
+  },
+  {
+    title: 'Backend, APIs and DevOps',
+    detail:
+      'REST and GraphQL APIs, database schemas, automated tests, and CI/CD with GitHub Actions and Docker on Railway or Vercel. My day-to-day at Riamona.',
+    proof: [],
+  },
+]
 
 /** Logos of the events a project placed at, for the placement line on its sheet. */
 export const brandsForProject = (projectId: string): readonly BrandId[] =>

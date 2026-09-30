@@ -8,6 +8,7 @@ import type { Project } from './types'
 
 export const chakravyuh: Project = {
   id: 'chakravyuh',
+  featured: true,
   title: 'Chakravyuh',
   subtitle: 'Multi-agent reinforcement learning for UPI fraud detection',
   category: 'ML · Reinforcement learning',
@@ -52,6 +53,7 @@ export const chakravyuh: Project = {
 
 export const vayunetra: Project = {
   id: 'vayunetra',
+  featured: true,
   title: 'VayuNetra',
   subtitle: 'Hyperlocal air-quality intelligence for 10 Indian cities',
   category: 'AI agents · Geospatial ML',
@@ -95,6 +97,7 @@ export const vayunetra: Project = {
 
 export const fitmon: Project = {
   id: 'fitmon',
+  featured: true,
   title: 'Fitmon',
   subtitle: 'An Android fitness game where the camera referees every rep',
   category: 'Android · On-device ML',
@@ -235,8 +238,13 @@ export const v2v: Project = {
   links: [{ label: 'Source on GitHub', href: 'https://github.com/omkarrr88/V2V' }],
 }
 
-export const featured: readonly Project[] = [chakravyuh, vayunetra, fitmon]
-export const moreWork: readonly Project[] = [debugger_, smartPuc, v2v]
+/** Newest and strongest first within each group; add a project here and it appears everywhere. */
+const ALL: readonly Project[] = [chakravyuh, vayunetra, fitmon, debugger_, smartPuc, v2v]
+
+/** Large in the Work chapter. */
+export const featured: readonly Project[] = ALL.filter((p) => p.featured)
+/** The smaller row beneath. */
+export const moreWork: readonly Project[] = ALL.filter((p) => !p.featured)
 /** Every project, in the order Work shows them and Next/Previous walks through them. */
 export const projects: readonly Project[] = [...featured, ...moreWork]
 

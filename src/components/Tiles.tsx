@@ -42,7 +42,7 @@ function TileFigure({ project }: { readonly project: Project }) {
   )
 }
 
-/** The three hackathon builds: figure, name, result. */
+/** A featured build: figure, name, result. */
 export function LargeProjectTile({ project, index }: { readonly project: Project; readonly index: number }) {
   const [result, event] = splitPlacement(project.placement)
   return (
@@ -63,7 +63,7 @@ export function LargeProjectTile({ project, index }: { readonly project: Project
   )
 }
 
-/** The other three: name, one line, one number. */
+/** The rest of the work: name, one line, one number. */
 export function SmallProjectTile({ project, index }: { readonly project: Project; readonly index: number }) {
   const lead = project.numbers[0]
   return (

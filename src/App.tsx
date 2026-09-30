@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import type Lenis from 'lenis'
@@ -14,6 +14,7 @@ import { metaFor, placementFor } from './router/meta'
 import { RouterProvider, useRouter, type NavigationKind } from './router/Router'
 import { SECTIONS, sectionOf, type Route, type SectionKey } from './router/routes'
 import { LeavingContext } from './router/transition'
+import { releaseReveals } from './motion/pending'
 import { activeRingForStage } from './scene/formation'
 import { MAX_SCROLL_DEPTH } from './scroll/depth'
 
@@ -28,8 +29,15 @@ const LAND_OFFSET_PX = -84
 /** A smooth in-page scroll (Index chapter, back to the top), in seconds. */
 const IN_PAGE_SCROLL_S = 1.6
 
-/** Analytics only report from the deployed site, not from local or LAN previews. */
+/** Analytics only report from the deployed site, not from local or LAN previews (nor from the build). */
 const isDeployed = (host: string) => !/^(localhost|127\.0\.0\.1|\d+\.\d+\.\d+\.\d+)$/.test(host)
+const noSubscription = () => () => {}
+const useDeployed = () =>
+  useSyncExternalStore(
+    noSubscription,
+    () => isDeployed(window.location.hostname),
+    () => false,
+  )
 
 interface View {
   readonly path: string
@@ -58,7 +66,12 @@ function scrollPage(lenis: Lenis | null, target: string | number, smooth: boolea
   window.scrollTo({ top, behavior: smooth ? 'smooth' : 'auto' })
 }
 
-export default function App() {
+interface AppProps {
+  /** Set only when the page is prerendered at build time. */
+  readonly serverPath?: string
+}
+
+export default function App({ serverPath }: AppProps) {
   const reducedMotion = usePrefersReducedMotion()
   const lenis = useSmoothScroll(!reducedMotion)
   const onSamePage = useCallback(
@@ -66,7 +79,7 @@ export default function App() {
     [lenis, reducedMotion],
   )
   return (
-    <RouterProvider onSamePage={onSamePage}>
+    <RouterProvider onSamePage={onSamePage} serverPath={serverPath}>
       <Site lenis={lenis} reducedMotion={reducedMotion} />
     </RouterProvider>
   )
@@ -82,6 +95,7 @@ function Site({ lenis, reducedMotion }: { readonly lenis: Lenis | null; readonly
   const [homeChapter, setHomeChapter] = useState(chapters[0].anchor)
   const pageRef = useRef<HTMLElement>(null)
   const formationRef = useRef<ScrollListener>(null)
+  const deployed = useDeployed()
 
   // The camera sets off the moment the URL changes; the page content follows once the old page has faded.
   const placement = useMemo(() => placementFor(route), [route])
@@ -141,7 +155,10 @@ function Site({ lenis, reducedMotion }: { readonly lenis: Lenis | null; readonly
 
   useEffect(() => {
     const root = pageRef.current
-    if (!root || reducedMotion) return
+    if (!root || reducedMotion) {
+      releaseReveals()
+      return
+    }
     let cleanup: (() => void) | undefined
     let cancelled = false
     const fonts = Promise.race([document.fonts.ready, new Promise((resolve) => setTimeout(resolve, FONT_WAIT_MS))])
@@ -150,7 +167,10 @@ function Site({ lenis, reducedMotion }: { readonly lenis: Lenis | null; readonly
         // After a navigation, hold the entrance until the camera is most of the way there.
         if (!cancelled) cleanup = initReveals(root, { delay: view.kind === 'initial' ? 0 : 0.35 })
       })
-      .catch((error: unknown) => console.error('Reveals failed to start; content stays visible.', error))
+      .catch((error: unknown) => {
+        releaseReveals()
+        console.error('Reveals failed to start; content stays visible.', error)
+      })
     return () => {
       cancelled = true
       cleanup?.()
@@ -158,11 +178,19 @@ function Site({ lenis, reducedMotion }: { readonly lenis: Lenis | null; readonly
   }, [view.path, view.kind, reducedMotion])
 
   const toTop = useCallback(() => scrollPage(lenis, 0, !reducedMotion), [lenis, reducedMotion])
+  // Past the top bar, straight to the page's heading.
+  const skipToContent = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    pageRef.current?.querySelector<HTMLElement>('h1')?.focus()
+  }
 
   const classes = ['page', `page--${view.route.kind}`, leavingTo ? 'is-leaving' : '', view.kind !== 'initial' ? 'is-arriving' : '']
 
   return (
     <LeavingContext.Provider value={leavingTo}>
+      <a className="skip-link" href="#content" onClick={skipToContent}>
+        Skip to content
+      </a>
       <Formation ref={formationRef} reducedMotion={reducedMotion} placement={placement} labelFor={labelFor} />
       <Hud
         ring={ring}
@@ -172,10 +200,10 @@ function Site({ lenis, reducedMotion }: { readonly lenis: Lenis | null; readonly
         onOpenIndex={() => setIndexOpen(true)}
       />
       <IndexPanel open={indexOpen} path={path} section={section} onClose={() => setIndexOpen(false)} />
-      <main ref={pageRef} key={view.path} className={classes.filter(Boolean).join(' ')} data-page>
+      <main ref={pageRef} id="content" key={view.path} className={classes.filter(Boolean).join(' ')} data-page>
         <PageFor route={view.route} ring={activeRingForStage(placementFor(view.route).stage)} onTop={toTop} />
       </main>
-      {isDeployed(window.location.hostname) ? (
+      {deployed ? (
         <>
           <Analytics />
           <SpeedInsights />

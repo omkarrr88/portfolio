@@ -9,10 +9,10 @@
     <title>Omkar Kadam · Full-stack &amp; ML engineer</title>
     <meta
       name="description"
-      content="Omkar Kadam, full-stack and ML engineer in Navi Mumbai. 7th of 31,000+ teams at the Meta PyTorch Hackathon, top 10 at the ET AI Hackathon 2.0, top 7 at the iQOO Hackathon. Full Stack Engineer at Riamona."
+      content="Omkar Kadam, full-stack &amp; ML engineer in Navi Mumbai. Full Stack Engineer at Riamona. Open to full-time roles, freelance and contract work."
     />
     <meta name="author" content="Omkar Kadam" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://omkar-kadam.vercel.app/" />
 
     <meta property="og:type" content="website" />
@@ -22,20 +22,23 @@
     <meta property="og:title" content="Omkar Kadam · Full-stack &amp; ML engineer" />
     <meta
       property="og:description"
-      content="Six projects, three hackathon results from 2026, a paper under review, and the job, laid out as a seven-ring chakravyuh."
+      content="Omkar Kadam, full-stack &amp; ML engineer in Navi Mumbai. Open to full-time roles, freelance and contract work."
     />
-    <meta property="og:image" content="https://omkar-kadam.vercel.app/og-image.jpg" />
+    <!-- Every built page gets its own card (scripts/og-cards.ts), structured data and prerendered content (scripts/route-pages.ts). -->
+    <meta property="og:image" content="https://omkar-kadam.vercel.app/og/home.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Omkar Kadam, set over seven concentric rings drawn in thin light lines, the outer one in vermilion." />
+    <meta property="og:image:alt" content="Omkar Kadam, full-stack &amp; ML engineer, over seven thin rings, the outer one in vermilion." />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Omkar Kadam · Full-stack &amp; ML engineer" />
     <meta
       name="twitter:description"
-      content="Six projects, three hackathon results from 2026, a paper under review, and the job, laid out as a seven-ring chakravyuh."
+      content="Omkar Kadam, full-stack &amp; ML engineer in Navi Mumbai. Open to full-time roles, freelance and contract work."
     />
-    <meta name="twitter:image" content="https://omkar-kadam.vercel.app/og-image.jpg" />
+    <meta name="twitter:image" content="https://omkar-kadam.vercel.app/og/home.png" />
+    <meta name="twitter:image:alt" content="Omkar Kadam, full-stack &amp; ML engineer, over seven thin rings, the outer one in vermilion." />
 
     <script type="application/ld+json">
       {
@@ -57,8 +60,10 @@
       }
     </script>
 
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <style>
       html,
       body {
@@ -66,6 +71,18 @@
         color: #ece7de;
       }
     </style>
+    <script>
+      // Content that animates in starts hidden, so it doesn't show, vanish and then animate (src/motion/pending.ts).
+      // Not for reduced motion; and never for long, in case the scripts don't arrive.
+      try {
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.setAttribute('data-reveal-pending', '')
+          setTimeout(function () {
+            document.documentElement.removeAttribute('data-reveal-pending')
+          }, 4000)
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <noscript>

@@ -3,19 +3,40 @@
 // Limits mirror src/content/contact.ts.
 
 const TO = 'omkarkadam181188@gmail.com'
-const LIMITS = { name: 100, email: 200, message: 5000, minMessage: 10 }
+const LIMITS = { name: 100, email: 200, message: 5000, minMessage: 10, budget: 100 }
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// What the message is about (optional), as the form offers it; only project work comes with a budget.
+const TOPICS = { job: 'A full-time role', freelance: 'A freelance project', contract: 'Contract work', other: 'Something else' }
+const BUDGET_TOPICS = new Set(['freelance', 'contract'])
 
 // Best effort only: serverless instances don't share memory, so this slows a
 // single noisy client rather than guaranteeing a global limit.
 const WINDOW_MS = 10 * 60 * 1000
 const MAX_PER_WINDOW = 5
+const MAX_TRACKED = 5000
+// Senders by when they were last seen, longest-quiet first (a Map keeps insertion order).
 const recent = new Map()
+
+/**
+ * Forget senders with nothing inside the window. If that isn't enough, forget the
+ * longest-quiet senders who aren't being slowed down, so a flood from many
+ * addresses can't wipe the record of one that is.
+ */
+function prune(now) {
+  for (const [ip, times] of recent) {
+    if (times.every((t) => now - t >= WINDOW_MS)) recent.delete(ip)
+  }
+  for (const [ip, times] of recent) {
+    if (recent.size <= MAX_TRACKED) break
+    if (times.length < MAX_PER_WINDOW) recent.delete(ip)
+  }
+}
 
 function rateLimited(ip, now) {
   const hits = (recent.get(ip) ?? []).filter((t) => now - t < WINDOW_MS)
+  recent.delete(ip)
   recent.set(ip, [...hits, now])
-  if (recent.size > 5000) recent.clear()
+  if (recent.size > MAX_TRACKED) prune(now)
   return hits.length >= MAX_PER_WINDOW
 }
 
@@ -24,13 +45,17 @@ const oneLine = (value, max) => String(value).replace(/[\r\n]+/g, ' ').trim().sl
 
 function validate(body) {
   if (!body || typeof body !== 'object') return { error: 'Invalid request.' }
-  const { name, email, message, company } = body
+  const { name, email, message, company, topic = '', budget = '' } = body
   if ([name, email, message].some((v) => typeof v !== 'string')) return { error: 'All fields are required.' }
+  if (typeof topic !== 'string' || (topic !== '' && !Object.hasOwn(TOPICS, topic))) return { error: 'Unknown topic.' }
+  if (typeof budget !== 'string') return { error: 'Invalid budget.' }
   const clean = {
     // Cap one past the limit so over-long input is rejected below rather than silently cut.
     name: oneLine(name, LIMITS.name + 1),
     email: oneLine(email, LIMITS.email + 1),
     message: message.trim(),
+    topic,
+    budget: BUDGET_TOPICS.has(topic) ? oneLine(budget, LIMITS.budget + 1) : '',
     trap: typeof company === 'string' ? company.trim() : '',
   }
   if (!clean.name || clean.name.length > LIMITS.name) return { error: 'Please give your name.' }
@@ -38,6 +63,7 @@ function validate(body) {
   if (clean.message.length < LIMITS.minMessage || clean.message.length > LIMITS.message) {
     return { error: 'Please write a message of 10 to 5,000 characters.' }
   }
+  if (clean.budget.length > LIMITS.budget) return { error: 'Please keep the budget under 100 characters.' }
   return { value: clean }
 }
 
@@ -65,16 +91,24 @@ export default async function handler(req, res) {
   }
 
   // Plain text only: nothing the sender typed is ever interpreted as HTML.
-  const text = [`From: ${value.name} <${value.email}>`, '', value.message, '', '— Sent from the portfolio contact form'].join(
-    '\n',
-  )
+  const about = value.topic ? TOPICS[value.topic] : ''
+  const text = [
+    `From: ${value.name} <${value.email}>`,
+    ...(about ? [`About: ${about}`] : []),
+    ...(value.budget ? [`Budget: ${value.budget}`] : []),
+    '',
+    value.message,
+    '',
+    '— Sent from the portfolio contact form',
+  ].join('\n')
+  const subject = about ? `Portfolio: ${about.toLowerCase()}, from ${value.name}` : `Portfolio: message from ${value.name}`
 
   try {
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: TO }], subject: `Portfolio: message from ${value.name}` }],
+        personalizations: [{ to: [{ email: TO }], subject }],
         from: { email: TO, name: 'Omkar Kadam Portfolio' },
         reply_to: { email: value.email, name: value.name },
         content: [{ type: 'text/plain', value: text }],

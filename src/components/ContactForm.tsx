@@ -1,11 +1,19 @@
 import { useState, type FormEvent } from 'react'
-import { LIMITS, validateContact, type ContactErrors, type ContactInput } from '../content/contact'
+import {
+  LIMITS,
+  TOPICS,
+  asksForBudget,
+  validateContact,
+  type ContactErrors,
+  type ContactInput,
+  type Topic,
+} from '../content/contact'
 import { person } from '../content/profile'
 
 type Status = 'idle' | 'sending' | 'sent' | 'failed'
 
-const EMPTY: ContactInput = { name: '', email: '', message: '' }
-const FIELD_ORDER = ['name', 'email', 'message'] as const
+const EMPTY: ContactInput = { name: '', email: '', message: '', topic: '', budget: '' }
+const FIELD_ORDER = ['name', 'email', 'budget', 'message'] as const
 
 /** A letter on paper. If sending fails for any reason, it says so and offers the address instead. */
 export function ContactForm() {
@@ -13,10 +21,12 @@ export function ContactForm() {
   const [errors, setErrors] = useState<ContactErrors>({})
   const [status, setStatus] = useState<Status>('idle')
 
-  const update = (field: keyof ContactInput) => (value: string) => {
+  const update = (field: Exclude<keyof ContactInput, 'topic'>) => (value: string) => {
     setValues((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }))
   }
+  const choose = (topic: Topic) => setValues((prev) => ({ ...prev, topic }))
+  const withBudget = asksForBudget(values.topic)
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -33,7 +43,8 @@ export function ContactForm() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...values, company: honeypot ?? '' }),
+        // A budget only goes with project work; switching topic away from it drops what was typed.
+        body: JSON.stringify({ ...values, budget: withBudget ? values.budget : '', company: honeypot ?? '' }),
       })
       // Require the API's own success flag: a host that serves index.html for unknown paths also answers 200.
       const result: unknown = await response.json().catch(() => null)
@@ -51,7 +62,9 @@ export function ContactForm() {
     return (
       <div className="letter letter--sent" role="status">
         <p className="letter__eyebrow">Sent</p>
-        <p className="letter__done">Thanks. Your message is in my inbox, and I’ll reply to the address you gave.</p>
+        <p className="letter__done">
+          Thanks. It’s in my inbox, and I’ll reply within {person.replyWithin} to the address you gave.
+        </p>
       </div>
     )
   }
@@ -61,6 +74,23 @@ export function ContactForm() {
       <p id="letter-title" className="letter__eyebrow">
         Or write it here
       </p>
+      <fieldset className="topics">
+        <legend className="field__label">What’s it about? (optional)</legend>
+        <div className="topics__options">
+          {TOPICS.map((t) => (
+            <label key={t.value} className="topic">
+              <input
+                type="radio"
+                name="topic"
+                value={t.value}
+                checked={values.topic === t.value}
+                onChange={() => choose(t.value)}
+              />
+              <span className="topic__label">{t.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <Field
         id="contact-name"
         label="Your name"
@@ -80,6 +110,17 @@ export function ContactForm() {
         error={errors.email}
         onChange={update('email')}
       />
+      {withBudget ? (
+        <Field
+          id="contact-budget"
+          label="Rough budget (optional)"
+          value={values.budget}
+          maxLength={LIMITS.budget}
+          error={errors.budget}
+          required={false}
+          onChange={update('budget')}
+        />
+      ) : null}
       <Field
         id="contact-message"
         label="Message"
@@ -120,15 +161,17 @@ interface FieldProps {
   readonly type?: string
   readonly autoComplete?: string
   readonly multiline?: boolean
+  readonly required?: boolean
 }
 
-function Field({ id, label, value, maxLength, onChange, error, type = 'text', autoComplete, multiline = false }: FieldProps) {
+function Field(props: FieldProps) {
+  const { id, label, value, maxLength, onChange, error, type = 'text', autoComplete, multiline = false, required = true } = props
   const shared = {
     id,
     name: id.replace('contact-', ''),
     value,
     maxLength,
-    required: true,
+    required,
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? `${id}-error` : undefined,
   } as const

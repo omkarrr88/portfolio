@@ -1,3 +1,4 @@
+import { capitalise, eventName, heroResults, listJoin, numberWord } from '../content/copy'
 import { projectById, projects } from '../content/projects'
 import { achievements, education, experience, leadership, person, publication } from '../content/profile'
 import { ABOUT_IDS, type AboutId, type Route } from './routes'
@@ -35,32 +36,46 @@ const SECTION_YAW = { about: -0.7, work: 0, record: 0.7 } as const
 /** Neighbouring items sit this far apart around the ring, so Next turns the formation. */
 const ITEM_YAW_STEP = 0.5
 
+const [job] = experience
+const [degree] = education
+
 export const ABOUT_LABELS: Record<AboutId, string> = {
-  riamona: 'Riamona',
+  riamona: job.short,
   terna: 'Terna',
   leadership: 'Leadership',
   toolkit: 'Toolkit',
 }
 
 const ABOUT_TITLES: Record<AboutId, string> = {
-  riamona: 'Full Stack Engineer at Riamona',
+  riamona: `${job.role} at ${job.short}`,
   terna: 'BE Information Technology, Terna',
   leadership: 'Leadership',
   toolkit: 'Toolkit',
 }
 
-const [job] = experience
-const [degree] = education
-
 /** One line per About page, for search results and link previews. */
 const ABOUT_DESCRIPTIONS: Record<AboutId, string> = {
   riamona: `${job.role} at ${job.org}, ${job.place}. ${job.period}.`,
   terna: `${degree.title}, ${degree.school}, ${degree.place}. ${degree.period}.`,
-  leadership: `Three committees at Terna: ${leadership.map((l) => l.peak).join('; ')}.`,
+  leadership: `${capitalise(numberWord(leadership.length))} committees at Terna: ${leadership.map((l) => l.peak).join('; ')}.`,
   toolkit: 'The languages, frameworks, ML and infrastructure tools I work with, grouped by area.',
 }
 
 const titled = (...parts: string[]) => [...parts, SITE].join(' · ')
+const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1)
+
+/** Who, the latest results, the job and availability: what search results and link previews show for home. */
+const homeDescription = (): string => {
+  const results = heroResults.map((a) => [lowerFirst(a.result), a.field, 'at', eventName(a)].filter(Boolean).join(' '))
+  return [
+    `${SITE}, ${lowerFirst(person.role)} in ${person.place}.`,
+    results.length > 0 ? `${capitalise(listJoin(results))}.` : '',
+    `${job.role} at ${job.short}.`,
+    person.availability,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
 const itemYaw = (base: number, index: number) => base + ((index % 3) - 1) * ITEM_YAW_STEP
 
 const WORK: Crumb = { label: 'Work', href: '/#work' }
@@ -80,7 +95,7 @@ export function metaFor(route: Route): PageMeta {
     case 'home':
       return {
         title: `${SITE} · ${person.role}`,
-        description: `${person.intro} ${person.role} in ${person.place}.`,
+        description: homeDescription(),
         label: 'Home',
         crumbs: [],
       }
@@ -112,7 +127,12 @@ export function metaFor(route: Route): PageMeta {
         crumbs: [ABOUT, { label: ABOUT_LABELS[route.id], href: `/about/${route.id}` }],
       }
     case 'notFound':
-      return { title: titled('Not found'), description: '', label: 'Nothing here', crumbs: [] }
+      return {
+        title: titled('Not found'),
+        description: `There’s nothing at this address. ${SITE}’s work, results and contact details are one link away.`,
+        label: 'Nothing here',
+        crumbs: [],
+      }
   }
 }
 

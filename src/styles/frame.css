@@ -50,6 +50,31 @@
 
 /* ---------- HUD ---------- */
 
+/* Hidden until a keyboard user tabs to it: the first stop on every page. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: var(--gutter);
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: var(--paper);
+  color: var(--paper-ink);
+  transform: translateY(-160%);
+  transition: transform 0.25s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--accent-on-paper);
+}
+
 .hud {
   position: fixed;
   left: 0;

@@ -103,6 +103,11 @@ button {
   color: var(--bg);
 }
 
+/* Prerendered content waiting for its entrance starts hidden (see src/motion/pending.ts). */
+html[data-reveal-pending] :is([data-split], [data-reveal], [data-stagger] > *, [data-sheet], [data-figure] .figure__frame) {
+  opacity: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

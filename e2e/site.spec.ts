@@ -82,6 +82,15 @@ test.describe('the home scroll', () => {
     }
   })
 
+  test('says up front what I’m open to, with a way to get in touch', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.hero__status')).toHaveText('Open to full-time roles, freelance and contract work.')
+    await page.locator('.hero__action', { hasText: 'Start a conversation' }).click()
+    await expect(page).toHaveURL(/\/#contact$/)
+    await expect(page.locator('.hud__ring')).toContainText('Centre', { timeout: 6000 })
+    await expect(page.locator('#contact .service')).toHaveCount(4)
+  })
+
   test('shows the organisers’ logos beside the hackathon results', async ({ page }) => {
     await page.goto('/')
     for (const brand of ['meta', 'pytorch', 'economic-times', 'iqoo']) {
@@ -221,12 +230,58 @@ test('every figure on a project page loads and is described', async ({ page }) =
   }
 })
 
-test('resume, favicon, social image and sitemap are served', async ({ page }) => {
+test('resume, icons, manifest, social images and sitemap are served', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('link', { name: /Resume/ }).first()).toHaveAttribute('href', '/resume.pdf')
-  for (const path of ['/resume.pdf', '/favicon.svg', '/apple-touch-icon.png', '/og-image.jpg', '/sitemap.xml']) {
+  const files = ['/resume.pdf', '/favicon.svg', '/favicon.ico', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png']
+  for (const path of [...files, '/site.webmanifest', '/og/home.png', '/og/work-chakravyuh.png', '/sitemap.xml']) {
     expect((await page.request.get(path)).status(), path).toBe(200)
   }
+})
+
+test.describe('what search engines and link previews see', () => {
+  /** The page as a crawler without JavaScript gets it. */
+  const rawHtml = async (page: Page, path: string) => (await page.request.get(path)).text()
+
+  test('every page arrives with its content, its own title and its structured data', async ({ page }) => {
+    for (const { path, h1 } of [{ path: '/', h1: 'Omkar Kadam' }, ...PAGES]) {
+      const html = await rawHtml(page, path)
+      const heading = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1]?.replace(/<[^>]+>/g, '').trim() ?? ''
+      if (typeof h1 === 'string') expect(heading, path).toBe(h1)
+      else expect(heading, path).toMatch(h1)
+      const ld = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1] ?? '{}'
+      const graph: { '@type': string }[] = JSON.parse(ld)['@graph'] ?? []
+      expect(graph.map((n) => n['@type']), path).toContain(path === '/' ? 'ProfilePage' : 'BreadcrumbList')
+      expect(graph.map((n) => n['@type']), path).toContain('Person')
+      expect(html, path).toContain(`<link rel="canonical" href="https://omkar-kadam.vercel.app${path}" />`)
+    }
+  })
+
+  test('each page has its own share image, and it exists', async ({ page }) => {
+    for (const path of ['/', '/work/fitmon', '/record/iqoo', '/about/toolkit']) {
+      const html = await rawHtml(page, path)
+      const image = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1] ?? ''
+      const slug = path === '/' ? 'home' : path.slice(1).replace(/\//g, '-')
+      expect(image, path).toBe(`https://omkar-kadam.vercel.app/og/${slug}.png`)
+      const response = await page.request.get(new URL(image).pathname)
+      expect(response.headers()['content-type'], path).toContain('image/png')
+    }
+  })
+
+  test('the name is two words, not "OmkarKadam"', async ({ page }) => {
+    await page.goto('/')
+    expect(await page.locator('h1').evaluate((el) => el.textContent?.replace(/\s+/g, ' ').trim())).toBe('Omkar Kadam')
+  })
+})
+
+test('keyboard users can skip the top bar', async ({ page }) => {
+  await page.goto('/work/chakravyuh')
+  await page.keyboard.press('Tab')
+  const skip = page.getByRole('link', { name: 'Skip to content' })
+  await expect(skip).toBeFocused()
+  await expect(skip).toBeInViewport()
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
 })
 
 test('external links open safely in a new tab', async ({ page }) => {
@@ -247,6 +302,13 @@ test('contact form explains mistakes and falls back to email if sending fails', 
   await form.getByRole('button', { name: 'Send' }).click()
   await expect(form.getByText('Tell me who you are.')).toBeVisible()
   await expect(page.locator('#contact-name')).toBeFocused()
+
+  // A budget is asked only about project work.
+  await expect(page.locator('#contact-budget')).toHaveCount(0)
+  await form.getByRole('radio', { name: 'A freelance project' }).check()
+  await expect(page.locator('#contact-budget')).toBeVisible()
+  await form.getByRole('radio', { name: 'A full-time role' }).check()
+  await expect(page.locator('#contact-budget')).toHaveCount(0)
 
   await page.locator('#contact-name').fill('Recruiter')
   await page.locator('#contact-email').fill('recruiter@example.com')

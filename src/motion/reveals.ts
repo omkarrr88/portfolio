@@ -1,6 +1,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
+import { releaseReveals } from './pending'
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
@@ -94,6 +95,8 @@ function unveilFigures(root: HTMLElement, base: number): void {
  * this module (reduced motion never loads it). Returns a cleanup.
  */
 export function initReveals(root: HTMLElement, { delay }: RevealOptions): () => void {
+  // Unhide and set every starting state in the same task, so nothing flashes in between.
+  releaseReveals()
   const ctx = gsap.context(() => {
     splitLines(root, delay)
     fadeUp(root, delay)
