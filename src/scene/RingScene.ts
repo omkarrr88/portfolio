@@ -1,14 +1,4 @@
 import {
-  Mesh,
-  OrthographicCamera,
-  PlaneGeometry,
-  Scene,
-  ShaderMaterial,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-} from 'three'
-import {
   RING_GROWTH,
   activeRingForStage,
   buildRings,
@@ -17,6 +7,7 @@ import {
   type CameraParams,
 } from './formation'
 import { fragmentShader, vertexShader } from './shaders'
+import { GLError, createFullScreenTriangle, createProgram, uniformLocations, type UniformLocations } from './gl'
 import { palette } from '../theme/palette'
 
 const BASE_PITCH = 0.74
@@ -29,6 +20,29 @@ const FRAME_SAMPLE = 90
 const DUST_PER_UNIT = 26
 const DUST_REFERENCE_FRAME_PX = 594
 
+const UNIFORMS = [
+  'uResolution',
+  'uPixelRatio',
+  'uTime',
+  'uStage',
+  'uPitch',
+  'uYaw',
+  'uDistance',
+  'uFocal',
+  'uWorldZoom',
+  'uActive',
+  'uDustDensity',
+  'uBg',
+  'uInk',
+  'uAccent',
+  'uRadius',
+  'uDir',
+  'uSpeed',
+  'uGap',
+  'uTicks',
+] as const
+type UniformName = (typeof UNIFORMS)[number]
+
 export interface FrameInfo {
   readonly stage: number
   readonly activeRing: number
@@ -38,29 +52,41 @@ export interface FrameInfo {
 export interface RingSceneOptions {
   readonly reducedMotion: boolean
   readonly onFrame?: (info: FrameInfo) => void
-  /** Called once if the GPU rejects the shader, so the caller can fall back. */
+  /** Called if WebGL2 is missing, the shader is rejected, or the context is lost for good. */
   readonly onError?: (message: string) => void
 }
 
-const toVec3 = ([r, g, b]: readonly [number, number, number]) => new Vector3(r / 255, g / 255, b / 255)
+interface GpuResources {
+  readonly program: WebGLProgram
+  readonly vao: WebGLVertexArrayObject
+  readonly buffer: WebGLBuffer
+  readonly uniforms: UniformLocations<UniformName>
+}
 
-/** Owns the WebGL canvas that draws the formation. One instance per canvas. */
+const rgb = ([r, g, b]: readonly [number, number, number]) => [r / 255, g / 255, b / 255] as const
+
+/**
+ * Owns the canvas that draws the formation: one WebGL2 program and one
+ * full-screen triangle, no engine. Throws GLError from the constructor if
+ * WebGL2 is unavailable so the caller can show the static fallback.
+ */
 export class RingScene {
-  private readonly renderer: WebGLRenderer
-  private readonly scene = new Scene()
-  private readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)
-  private readonly material: ShaderMaterial
-  private readonly geometry = new PlaneGeometry(2, 2)
+  private readonly canvas: HTMLCanvasElement
+  private readonly gl: WebGL2RenderingContext
   private readonly options: RingSceneOptions
+  private gpu: GpuResources | null = null
+  private frame = 0
 
   private width = 1
   private height = 1
-  private pixelRatio = 1
+  private pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
   private worldZoom = 1
   private stage = 0
   private targetStage = 0
-  private pointer = { x: 0, y: 0 }
-  private smoothPointer = { x: 0, y: 0 }
+  private pointerX = 0
+  private pointerY = 0
+  private smoothX = 0
+  private smoothY = 0
   private velocityTilt = 0
   private targetVelocityTilt = 0
   private elapsed = 0
@@ -72,53 +98,28 @@ export class RingScene {
   private frameSum = 0
 
   constructor(canvas: HTMLCanvasElement, options: RingSceneOptions) {
+    this.canvas = canvas
     this.options = options
-    this.renderer = new WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' })
-    this.renderer.debug.onShaderError = (gl, program) => {
-      this.renderer.setAnimationLoop(null)
-      options.onError?.(gl.getProgramInfoLog(program) ?? 'shader failed to compile')
-    }
-    this.pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
-
-    const rings = buildRings()
-    this.material = new ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      depthTest: false,
-      depthWrite: false,
-      uniforms: {
-        uResolution: { value: new Vector2(1, 1) },
-        uPixelRatio: { value: this.pixelRatio },
-        uTime: { value: 0 },
-        uStage: { value: 0 },
-        uPitch: { value: BASE_PITCH },
-        uYaw: { value: 0 },
-        uDistance: { value: DISTANCE },
-        uFocal: { value: FOCAL },
-        uWorldZoom: { value: 1 },
-        uActive: { value: 7 },
-        uDustDensity: { value: DUST_PER_UNIT },
-        uBg: { value: toVec3(palette.bg) },
-        uInk: { value: toVec3(palette.ink) },
-        uAccent: { value: toVec3(palette.accent) },
-        uRadius: { value: rings.map((r) => r.radius) },
-        uDir: { value: rings.map((r) => r.direction) },
-        uSpeed: { value: rings.map((r) => r.speed) },
-        uGap: { value: rings.map((r) => r.gapAt) },
-        uTicks: { value: rings.map((r) => r.ticks) },
-      },
+    const gl = canvas.getContext('webgl2', {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: false,
     })
-    this.scene.add(new Mesh(this.geometry, this.material))
-    this.renderer.setAnimationLoop(this.tick)
+    if (!gl) throw new GLError('WebGL2 is not available')
+    this.gl = gl
+    this.gpu = this.createResources()
+    canvas.addEventListener('webglcontextlost', this.onContextLost)
+    canvas.addEventListener('webglcontextrestored', this.onContextRestored)
+    this.frame = requestAnimationFrame(this.tick)
   }
 
   resize(width: number, height: number): void {
     this.width = Math.max(1, width)
     this.height = Math.max(1, height)
     this.worldZoom = worldZoomForViewport(this.width, this.height, DISTANCE, FOCAL)
-    // Keep dust density constant on screen: small screens get fewer cells per unit.
-    this.material.uniforms.uDustDensity.value =
-      DUST_PER_UNIT * (frameRadiusPx(this.width, this.height) / DUST_REFERENCE_FRAME_PX)
     this.applyPixelRatio(this.pixelRatio)
   }
 
@@ -128,7 +129,8 @@ export class RingScene {
 
   /** Normalised pointer, -1..1 on both axes. */
   setPointer(x: number, y: number): void {
-    this.pointer = { x, y }
+    this.pointerX = x
+    this.pointerY = y
   }
 
   /** Scroll velocity in px per ms; tilts the formation slightly while moving. */
@@ -137,19 +139,75 @@ export class RingScene {
   }
 
   dispose(): void {
-    this.renderer.setAnimationLoop(null)
-    this.geometry.dispose()
-    this.material.dispose()
-    this.renderer.dispose()
+    cancelAnimationFrame(this.frame)
+    this.canvas.removeEventListener('webglcontextlost', this.onContextLost)
+    this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored)
+    this.releaseResources()
+  }
+
+  private createResources(): GpuResources {
+    const gl = this.gl
+    const program = createProgram(gl, vertexShader, fragmentShader)
+    const { vao, buffer } = createFullScreenTriangle(gl)
+    const uniforms = uniformLocations(gl, program, UNIFORMS)
+    const rings = buildRings()
+
+    gl.useProgram(program)
+    gl.uniform1f(uniforms.uDistance, DISTANCE)
+    gl.uniform1f(uniforms.uFocal, FOCAL)
+    gl.uniform3fv(uniforms.uBg, rgb(palette.bg))
+    gl.uniform3fv(uniforms.uInk, rgb(palette.ink))
+    gl.uniform3fv(uniforms.uAccent, rgb(palette.accent))
+    gl.uniform1fv(uniforms.uRadius, rings.map((r) => r.radius))
+    gl.uniform1fv(uniforms.uDir, rings.map((r) => r.direction))
+    gl.uniform1fv(uniforms.uSpeed, rings.map((r) => r.speed))
+    gl.uniform1fv(uniforms.uGap, rings.map((r) => r.gapAt))
+    gl.uniform1fv(uniforms.uTicks, rings.map((r) => r.ticks))
+    return { program, vao, buffer, uniforms }
+  }
+
+  private releaseResources(): void {
+    const { gl, gpu } = this
+    if (!gpu || gl.isContextLost()) {
+      this.gpu = null
+      return
+    }
+    gl.deleteProgram(gpu.program)
+    gl.deleteVertexArray(gpu.vao)
+    gl.deleteBuffer(gpu.buffer)
+    this.gpu = null
+  }
+
+  private readonly onContextLost = (event: Event): void => {
+    event.preventDefault()
+    cancelAnimationFrame(this.frame)
+    this.gpu = null
+  }
+
+  private readonly onContextRestored = (): void => {
+    try {
+      this.gpu = this.createResources()
+      this.applyPixelRatio(this.pixelRatio)
+      this.frame = requestAnimationFrame(this.tick)
+    } catch (error: unknown) {
+      this.options.onError?.(error instanceof Error ? error.message : 'WebGL context could not be restored')
+    }
   }
 
   private applyPixelRatio(ratio: number): void {
     this.pixelRatio = ratio
-    this.renderer.setPixelRatio(ratio)
-    this.renderer.setSize(this.width, this.height, false)
-    const size = this.renderer.getDrawingBufferSize(new Vector2())
-    this.material.uniforms.uResolution.value.copy(size)
-    this.material.uniforms.uPixelRatio.value = ratio
+    const w = Math.max(1, Math.round(this.width * ratio))
+    const h = Math.max(1, Math.round(this.height * ratio))
+    if (this.canvas.width !== w) this.canvas.width = w
+    if (this.canvas.height !== h) this.canvas.height = h
+    const { gl, gpu } = this
+    if (!gpu) return
+    gl.viewport(0, 0, w, h)
+    gl.useProgram(gpu.program)
+    gl.uniform2f(gpu.uniforms.uResolution, w, h)
+    gl.uniform1f(gpu.uniforms.uPixelRatio, ratio)
+    // Keep dust density constant on screen: small screens get fewer cells per unit.
+    gl.uniform1f(gpu.uniforms.uDustDensity, DUST_PER_UNIT * (frameRadiusPx(this.width, this.height) / DUST_REFERENCE_FRAME_PX))
   }
 
   /** Drops resolution if the device can't keep up (mid-range phones). O(1), no allocation. */
@@ -167,6 +225,10 @@ export class RingScene {
   }
 
   private readonly tick = (time: number): void => {
+    this.frame = requestAnimationFrame(this.tick)
+    const { gl, gpu } = this
+    if (!gpu) return
+
     const dtMs = this.lastTime ? Math.min(100, time - this.lastTime) : 16
     this.lastTime = time
     const dt = dtMs / 1000
@@ -176,26 +238,25 @@ export class RingScene {
 
     const ease = (rate: number) => 1 - Math.exp(-dt * rate)
     this.stage = reduced ? this.targetStage : this.stage + (this.targetStage - this.stage) * ease(6)
-    this.smoothPointer = {
-      x: this.smoothPointer.x + (this.pointer.x - this.smoothPointer.x) * ease(3),
-      y: this.smoothPointer.y + (this.pointer.y - this.smoothPointer.y) * ease(3),
-    }
+    this.smoothX += (this.pointerX - this.smoothX) * ease(3)
+    this.smoothY += (this.pointerY - this.smoothY) * ease(3)
     this.velocityTilt += (this.targetVelocityTilt - this.velocityTilt) * ease(4)
     this.targetVelocityTilt *= 1 - ease(3)
 
-    const pitch = BASE_PITCH + (reduced ? 0 : this.smoothPointer.y * 0.05 + this.velocityTilt)
-    const yaw = reduced ? 0 : this.smoothPointer.x * 0.07
+    const pitch = BASE_PITCH + (reduced ? 0 : this.smoothY * 0.05 + this.velocityTilt)
+    const yaw = reduced ? 0 : this.smoothX * 0.07
     const activeRing = activeRingForStage(this.stage)
+    const u = gpu.uniforms
 
-    const u = this.material.uniforms
-    u.uTime.value = this.elapsed
-    u.uStage.value = this.stage
-    u.uPitch.value = pitch
-    u.uYaw.value = yaw
-    u.uWorldZoom.value = this.worldZoom
-    u.uActive.value = activeRing
-
-    this.renderer.render(this.scene, this.camera)
+    gl.useProgram(gpu.program)
+    gl.uniform1f(u.uTime, this.elapsed)
+    gl.uniform1f(u.uStage, this.stage)
+    gl.uniform1f(u.uPitch, pitch)
+    gl.uniform1f(u.uYaw, yaw)
+    gl.uniform1f(u.uWorldZoom, this.worldZoom)
+    gl.uniform1f(u.uActive, activeRing)
+    gl.bindVertexArray(gpu.vao)
+    gl.drawArrays(gl.TRIANGLES, 0, 3)
 
     this.options.onFrame?.({
       stage: this.stage,

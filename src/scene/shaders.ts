@@ -3,10 +3,12 @@ import { RING_COUNT, RING_GROWTH } from './formation'
 /** GLSL needs a decimal point on float literals; keep full precision so CPU and GPU agree. */
 const glslFloat = (n: number) => (Number.isInteger(n) ? n.toFixed(1) : String(n))
 
-export const vertexShader = /* glsl */ `
-  void main() {
-    gl_Position = vec4(position.xy, 0.0, 1.0);
-  }
+// GLSL ES 3.00 (WebGL2). `#version` must be the very first line, so no leading whitespace.
+export const vertexShader = /* glsl */ `#version 300 es
+in vec2 aPosition;
+void main() {
+  gl_Position = vec4(aPosition, 0.0, 1.0);
+}
 `
 
 /**
@@ -14,8 +16,9 @@ export const vertexShader = /* glsl */ `
  * fields so every line stays a constant on-screen width at any zoom or tilt.
  * Camera maths mirrors cameraBasis/projectPlanePoint in formation.ts.
  */
-export const fragmentShader = /* glsl */ `
+export const fragmentShader = /* glsl */ `#version 300 es
   precision highp float;
+  out vec4 fragColor;
 
   #define RINGS ${RING_COUNT}
   const float TAU = 6.28318530718;
@@ -145,6 +148,6 @@ export const fragmentShader = /* glsl */ `
     col *= 1.0 - 0.3 * vignette;
     col += (hash12(frag + fract(uTime * 0.37) * 311.0) - 0.5) * 0.022;
 
-    gl_FragColor = vec4(col, 1.0);
+    fragColor = vec4(col, 1.0);
   }
 `
