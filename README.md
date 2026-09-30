@@ -54,8 +54,6 @@ and shows the email address instead.
 - `src/motion/reveals.ts`: GSAP entrances, loaded lazily and skipped for reduced motion.
 - `api/contact.js`: Vercel function for the contact form (validation, honeypot,
   plain-text email through SendGrid).
-- `scripts/subset-devanagari.mjs`: rebuilds the font subset for चक्रव्यूह and
-  वायुनेत्र. Re-run it if you add Devanagari text.
 - `src/assets/brands/`: one-colour organiser logos (Meta and PyTorch from Simple Icons;
   The Economic Times and iQOO wordmarks from Wikimedia Commons). They are their owners'
   trademarks, shown only beside the results won at those events.

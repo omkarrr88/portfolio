@@ -61,25 +61,12 @@
   color: var(--paper-ink-2);
 }
 
-.sheet__heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px 20px;
-}
-
 .sheet__title {
   margin-left: -0.04em;
   font-weight: 600;
   font-size: clamp(52px, 10vw, 136px);
   line-height: 0.86;
   letter-spacing: -0.055em;
-}
-
-.sheet__deva {
-  font: 400 clamp(24px, 3.2vw, 44px)/1.2 var(--font-deva);
-  color: var(--accent-on-paper);
 }
 
 .sheet__subtitle {

@@ -35,7 +35,6 @@ export interface Project {
   readonly title: string
   /** Shorter name for breadcrumbs and the ring label, when the title is long. */
   readonly short?: string
-  readonly devanagari?: string
   readonly subtitle: string
   readonly category: string
   readonly date: string

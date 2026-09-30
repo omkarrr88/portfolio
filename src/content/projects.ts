@@ -9,7 +9,6 @@ import type { Project } from './types'
 export const chakravyuh: Project = {
   id: 'chakravyuh',
   title: 'Chakravyuh',
-  devanagari: 'चक्रव्यूह',
   subtitle: 'Multi-agent reinforcement learning for UPI fraud detection',
   category: 'ML · Reinforcement learning',
   date: 'April 2026',
@@ -54,7 +53,6 @@ export const chakravyuh: Project = {
 export const vayunetra: Project = {
   id: 'vayunetra',
   title: 'VayuNetra',
-  devanagari: 'वायुनेत्र',
   subtitle: 'Hyperlocal air-quality intelligence for 10 Indian cities',
   category: 'AI agents · Geospatial ML',
   date: 'August 2026',

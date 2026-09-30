@@ -22,7 +22,6 @@
 
   --font-display: 'Familjen Grotesk', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
-  --font-deva: 'Tiro Devanagari Sanskrit', 'Noto Serif Devanagari', serif;
 
   --gutter: clamp(16px, 4vw, 48px);
   --content: 1120px;
@@ -30,14 +29,4 @@
   --sheet-pad: clamp(20px, 3.6vw, 52px);
   --headline: clamp(31px, 4.2vw, 58px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Subset built by scripts/subset-devanagari.mjs: only the glyphs the site uses. */
-@font-face {
-  font-family: 'Tiro Devanagari Sanskrit';
-  src: url('../assets/fonts/tiro-devanagari-subset.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0900-097F, U+200C-200D;
 }

@@ -45,16 +45,9 @@ export function ProjectPage({ id, ring }: { readonly id: string; readonly ring: 
           <span>{p.date}</span>
           {p.place ? <span>{p.place}</span> : null}
         </p>
-        <div className="sheet__heading">
-          <h1 id="project-title" className="sheet__title" tabIndex={-1}>
-            {p.title}
-          </h1>
-          {p.devanagari ? (
-            <span className="sheet__deva" lang="sa">
-              {p.devanagari}
-            </span>
-          ) : null}
-        </div>
+        <h1 id="project-title" className="sheet__title" tabIndex={-1}>
+          {p.title}
+        </h1>
         <p className="sheet__subtitle">{p.subtitle}</p>
         {p.placement ? (
           <p className="sheet__placement">
