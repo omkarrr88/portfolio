@@ -31,7 +31,8 @@ export function Hud({ activeRing, onOpenIndex, onHome }: HudProps) {
         </nav>
       </header>
       <footer className="hud hud--bottom" aria-hidden="true">
-        <p className="hud__ring">
+        {/* Keyed on the ring so the text rolls in fresh each time you arrive somewhere new. */}
+        <p key={activeRing} className="hud__ring">
           {atCentre ? 'Centre' : `${ringName(activeRing)} / 07`}
           <span className="hud__chapter">{atCentre ? 'Contact' : chapterForRing(activeRing).label}</span>
         </p>

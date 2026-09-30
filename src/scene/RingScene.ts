@@ -14,7 +14,8 @@ import { palette } from '../theme/palette'
 const DISTANCE = 4
 const FOCAL = 2
 const MAX_PIXEL_RATIO = 2
-const SLOW_FRAME_MS = 24
+/** Average frame time (ms) above which resolution steps down; ~50 fps. */
+const SLOW_FRAME_MS = 20
 const FRAME_SAMPLE = 90
 /** Dust cells per plane unit when the frame ring is this many CSS px wide. */
 const DUST_PER_UNIT = 26
@@ -236,7 +237,7 @@ export class RingScene {
     this.frameTimes.fill(0)
     this.frameSum = 0
     this.frameCount = 0
-    this.applyPixelRatio(Math.max(1, this.pixelRatio * 0.7))
+    this.applyPixelRatio(Math.max(1, this.pixelRatio * 0.75))
   }
 
   private readonly tick = (time: number): void => {

@@ -5,14 +5,15 @@ export interface Span {
 
 /**
  * How far the viewport centre sits inside any dense block (0..1). The value
- * ramps over the first and last quarter-screen of each block, so the
- * formation eases back while you read and returns between blocks.
+ * ramps over the first and last quarter-screen of each block (a third of the
+ * block, if it is short), so the formation eases back while you read and
+ * returns between blocks.
  */
 export function dimForScroll(scrollY: number, viewportHeight: number, blocks: readonly Span[]): number {
   if (viewportHeight <= 0) return 0
   const centre = scrollY + viewportHeight / 2
-  const ramp = viewportHeight / 4
   return blocks.reduce((dim, { top, bottom }) => {
+    const ramp = Math.max(1, Math.min(viewportHeight / 4, (bottom - top) / 3))
     const inside = Math.min(centre - top, bottom - centre) / ramp
     return Math.max(dim, Math.min(1, Math.max(0, inside)))
   }, 0)

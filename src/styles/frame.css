@@ -155,8 +155,31 @@
 }
 
 .hud__chapter {
+  display: inline-block;
   margin-left: 10px;
   color: var(--ink);
+}
+
+.hud__ring {
+  animation: hud-roll 0.7s var(--ease-out);
+}
+
+.hud__chapter {
+  animation: hud-roll 0.7s 0.06s var(--ease-out) both;
+}
+
+@keyframes hud-roll {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud__ring,
+  .hud__chapter {
+    animation: none;
+  }
 }
 
 .hud__ticks {
@@ -218,7 +241,8 @@
   margin: 0;
   padding: calc(var(--hud-h) + env(safe-area-inset-top) + 8px) var(--gutter) calc(32px + env(safe-area-inset-bottom));
   border: 0;
-  background: rgba(11, 10, 9, 0.96);
+  /* Opaque: the page behind would only compete with the list. */
+  background: var(--bg);
   color: var(--ink);
   overflow: auto;
   overscroll-behavior: contain;

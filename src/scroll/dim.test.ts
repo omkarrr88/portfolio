@@ -27,6 +27,11 @@ describe('dimForScroll', () => {
     expect(dimForScroll(centredAt(3000 - vh / 8), vh, blocks)).toBeCloseTo(0.5, 10)
   })
 
+  it('ramps faster through short blocks so they still reach full dim', () => {
+    const short = [{ top: 1000, bottom: 1300 }]
+    expect(dimForScroll(centredAt(1150), vh, short)).toBe(1)
+  })
+
   it('takes the deepest block when several are near', () => {
     const two = [
       { top: 0, bottom: 1000 },

@@ -27,6 +27,7 @@ function validate(body) {
   const { name, email, message, company } = body
   if ([name, email, message].some((v) => typeof v !== 'string')) return { error: 'All fields are required.' }
   const clean = {
+    // Cap one past the limit so over-long input is rejected below rather than silently cut.
     name: oneLine(name, LIMITS.name + 1),
     email: oneLine(email, LIMITS.email + 1),
     message: message.trim(),
