@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { pad } from '../content/chapters'
+import { pad } from '../lib/format'
 
 interface ChapterHeadProps {
   readonly ring: number
@@ -12,7 +12,7 @@ interface ChapterHeadProps {
 /** The opening of a chapter: ring marker, headline, one-line lede. Sits over the formation. */
 export function ChapterHead({ ring, label, titleId, title, lede }: ChapterHeadProps) {
   return (
-    <header className="chapter-head" data-quiet>
+    <header className="chapter-head" data-quiet data-land>
       <p className="marker" data-reveal>
         <span className="marker__ring">{ring === 0 ? '··' : pad(ring)}</span>
         <span className="marker__rule" aria-hidden="true" />

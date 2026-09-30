@@ -154,10 +154,12 @@ export const fitmon: Project = {
 export const debugger_: Project = {
   id: 'debugger',
   title: 'PyTorch Training Run Debugger',
+  short: 'Run Debugger',
   subtitle: 'An RL environment where agents debug broken training runs',
   category: 'ML · RL environment',
   date: 'April 2026',
   placement: 'Online round · Meta PyTorch Hackathon',
+  hook: 'Training runs fail in quiet ways: exploding gradients, leaked data, a BatchNorm layer left in eval mode.',
   figures: [],
   numbers: [
     { value: '245', label: 'tests, 95% coverage' },
@@ -181,6 +183,7 @@ export const smartPuc: Project = {
   category: 'Blockchain · IoT',
   date: 'May 2026',
   placement: 'Research prototype',
+  hook: 'Bharat Stage VI limits five pollutants. A check that looks only at CO2 missed 246 violations in 5,000 synthetic samples.',
   figures: [],
   numbers: [
     { value: '246', label: 'violations a CO2-only test misses, in 5,000 synthetic samples' },
@@ -202,10 +205,12 @@ export const smartPuc: Project = {
 export const v2v: Project = {
   id: 'v2v',
   title: 'V2V Blind Spot Detection',
+  short: 'V2V',
   subtitle: 'Vehicles that warn each other before a collision',
   category: 'Research · Vehicle safety',
   date: 'May 2026',
   placement: 'Finalist · Avishkar 2025 · Paper under review',
+  hook: 'Every connected car already broadcasts its position, speed and acceleration. I built a collision-risk score from just those fields.',
   figureLayout: 'chart',
   figures: [
     {
@@ -234,3 +239,7 @@ export const v2v: Project = {
 
 export const featured: readonly Project[] = [chakravyuh, vayunetra, fitmon]
 export const moreWork: readonly Project[] = [debugger_, smartPuc, v2v]
+/** Every project, in the order Work shows them and Next/Previous walks through them. */
+export const projects: readonly Project[] = [...featured, ...moreWork]
+
+export const projectById = (id: string): Project | undefined => projects.find((p) => p.id === id)

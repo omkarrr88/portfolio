@@ -1,0 +1,665 @@
+/* Tiles: the cards in the Work, Record and About chapters, and the project cards on record pages. Each is one big link. */
+
+/* ---------- Tiles: shared behaviour ---------- */
+
+.tile,
+.result-tile,
+.paper-tile,
+.about-tile,
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out),
+    border-color 0.4s,
+    background 0.4s;
+}
+
+/* Keeps the hover area where the card was, so a card lifting under a resting cursor never flickers off and on. */
+.tile::after,
+.result-tile::after,
+.paper-tile::after,
+.about-tile::after,
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 -12px;
+}
+
+.tile-arrow {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.5s var(--ease-out);
+}
+
+:is(.tile, .result-tile, .paper-tile, .about-tile, .card):hover .tile-arrow {
+  transform: translateX(5px);
+}
+
+/* ---------- Work: three large paper tiles, three quiet ones ---------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.tiles--small {
+  margin-top: 12px;
+}
+
+@media (min-width: 700px) {
+  .tiles--small {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .tiles--small {
+    margin-top: 16px;
+  }
+}
+
+.tiles > li {
+  display: flex;
+  min-width: 0;
+}
+
+.tile {
+  flex: 1;
+  min-width: 0;
+}
+
+.tile--large {
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.9);
+}
+
+.tile--large:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 44px 90px -40px rgba(0, 0, 0, 0.95);
+}
+
+.tile--large::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+}
+
+.tile__figure {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.tile__figure img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.tile:hover .tile__figure img {
+  transform: scale(1.035);
+}
+
+.tile__figure--chart {
+  padding: 10px;
+  background: #fff;
+}
+
+.tile__figure--chart img {
+  object-fit: contain;
+}
+
+.tile__figure--screen img {
+  object-fit: cover;
+  object-position: top left;
+}
+
+.tile__figure--phones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8%;
+  padding: 14px 12% 0;
+  background: var(--paper-2);
+}
+
+.tile__figure--phones img {
+  height: auto;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 0 1px rgba(21, 19, 17, 0.3);
+}
+
+.tile__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 20px 20px;
+}
+
+.tile__meta {
+  font: 500 10px/1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-ink-2);
+}
+
+.tile__title {
+  margin-top: 8px;
+  font-size: clamp(24px, 2.2vw, 30px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.tile__subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--paper-ink-2);
+}
+
+.tile__result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: auto;
+  padding: 14px 28px 0 0;
+  font: 500 10px/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tile__rank {
+  color: var(--accent-on-paper);
+}
+
+.tile__event {
+  color: var(--paper-ink-2);
+}
+
+.tile--small {
+  padding: 16px 44px 18px 18px;
+  border: 1px solid var(--line-strong);
+  background: rgba(11, 10, 9, 0.62);
+}
+
+.tile--small:hover {
+  border-color: var(--ink);
+  background: rgba(11, 10, 9, 0.85);
+}
+
+.tile--small .tile__meta {
+  color: var(--ink-3);
+}
+
+.tile--small .tile__title {
+  margin-top: 8px;
+  font-size: clamp(19px, 1.6vw, 23px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.tile--small .tile__subtitle {
+  margin-top: 6px;
+  color: var(--ink-2);
+}
+
+.tile__number {
+  margin-top: 10px;
+  font: 400 12px/1.4 var(--font-mono);
+  color: var(--ink-3);
+}
+
+.tile__number b {
+  margin-right: 4px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.tile--small .tile-arrow {
+  color: var(--ink-3);
+}
+
+/* Short laptop screens: trim the tiles so a whole section still fits on one screen. */
+@media (min-width: 900px) and (max-height: 820px) {
+  .tile__figure {
+    aspect-ratio: 5 / 2;
+  }
+
+  .tile .tile__subtitle {
+    display: none;
+  }
+
+  .result-tile {
+    padding-bottom: 36px;
+  }
+
+  .result-tile__result {
+    font-size: clamp(34px, 4vw, 56px);
+  }
+
+  .result-tile__event {
+    margin-top: 12px;
+  }
+
+  .paper-tile {
+    padding-block: 16px 18px;
+  }
+}
+
+/* Phones and tablets: the large tiles become rows with a thumbnail, so the section stays compact. */
+@media (max-width: 899px) {
+  .tile--large {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+
+  .tile__figure {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 118px;
+    border-bottom: 0;
+    border-right: 1px solid var(--paper-line);
+  }
+
+  .tile__figure--phones {
+    padding: 12px 16px 0;
+  }
+
+  .tile__body {
+    padding: 14px 40px 14px 18px;
+  }
+
+  .tile__title {
+    font-size: 24px;
+  }
+
+  .tile__result {
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 699px) {
+  .tile--large {
+    grid-template-columns: 104px minmax(0, 1fr);
+  }
+
+  .tile__figure--chart {
+    padding: 6px;
+  }
+
+  .tile__figure--phones {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 10px 22px 0;
+  }
+
+  .tile__figure--phones img:not(:nth-child(2)) {
+    display: none;
+  }
+
+  .tile__body {
+    padding: 12px 34px 12px 14px;
+  }
+
+  .tile--large .tile__subtitle,
+  .tile--large .tile__meta {
+    display: none;
+  }
+
+  .tile__title {
+    margin-top: 0;
+    font-size: 22px;
+  }
+
+  .tile__result {
+    padding-top: 8px;
+  }
+
+  .tile--small {
+    padding: 12px 40px 12px 14px;
+  }
+
+  .tile--small .tile__subtitle {
+    display: none;
+  }
+
+  .tile--small .tile__number {
+    margin-top: 6px;
+  }
+}
+
+/* ---------- Record: four results and the paper ---------- */
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (min-width: 900px) {
+  .results {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+.results > li {
+  display: flex;
+  min-width: 0;
+}
+
+.result-tile {
+  flex: 1;
+  min-width: 0;
+  padding: 18px 18px 44px;
+  border: 1px solid var(--line-strong);
+  background: rgba(11, 10, 9, 0.62);
+}
+
+.result-tile:hover {
+  border-color: var(--accent);
+  background: rgba(11, 10, 9, 0.85);
+  transform: translateY(-4px);
+}
+
+.result-tile__result {
+  font-size: clamp(38px, 4.6vw, 68px);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.result-tile__field {
+  margin-top: 8px;
+  font: 400 12px/1.4 var(--font-mono);
+  color: var(--ink-2);
+}
+
+.result-tile__event {
+  margin-top: clamp(14px, 3svh, 28px);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.result-tile__meta,
+.result-tile__with {
+  margin-top: 6px;
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.result-tile__with {
+  margin-top: auto;
+  padding-top: 12px;
+  color: var(--ink-2);
+}
+
+.result-tile .tile-arrow {
+  color: var(--accent);
+}
+
+.paper-tile {
+  margin-top: 12px;
+  padding: 20px 56px 22px clamp(18px, 2.4vw, 28px);
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-left: 3px solid var(--accent);
+}
+
+@media (min-width: 900px) {
+  .paper-tile {
+    margin-top: 16px;
+  }
+}
+
+.paper-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px -36px rgba(0, 0, 0, 0.9);
+}
+
+.paper-tile__status {
+  font: 500 10px/1.5 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-on-paper);
+}
+
+.paper-tile__title {
+  max-width: 52ch;
+  margin-top: 8px;
+  font-size: clamp(17px, 1.6vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+}
+
+.paper-tile__venue {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--paper-ink-2);
+}
+
+/* ---------- About: the job on paper, the rest as quiet tiles ---------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 700px) {
+  .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .about-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* Job and toolkit take two columns each, so the four tiles interlock without a gap. */
+  .about-grid__job,
+  .about-grid__wide {
+    grid-column: span 2;
+  }
+}
+
+.about-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.about-tile {
+  flex: 1;
+  min-width: 0;
+  padding: 18px 48px 20px 20px;
+  border: 1px solid var(--line-strong);
+  background: rgba(11, 10, 9, 0.62);
+}
+
+.about-tile:hover {
+  border-color: var(--ink);
+  background: rgba(11, 10, 9, 0.85);
+  transform: translateY(-4px);
+}
+
+.about-tile--job {
+  border: 0;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.9);
+}
+
+.about-tile--job:hover {
+  background: var(--paper);
+  box-shadow: 0 44px 90px -40px rgba(0, 0, 0, 0.95);
+}
+
+.about-tile--job::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+}
+
+.about-tile__kind {
+  font: 500 10px/1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.about-tile--job .about-tile__kind {
+  color: var(--accent-on-paper);
+}
+
+.about-tile__title {
+  margin-top: 10px;
+  font-size: clamp(21px, 1.9vw, 27px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.about-tile--job .about-tile__title {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.about-tile__line {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.about-tile--job .about-tile__line {
+  color: var(--paper-ink-2);
+}
+
+.about-tile__stack,
+.about-tile__foot {
+  margin-top: auto;
+  padding-top: 16px;
+  font: 400 12px/1.5 var(--font-mono);
+  color: var(--paper-ink-2);
+}
+
+.about-tile__foot {
+  color: var(--ink-3);
+}
+
+.about-tile .tile-arrow {
+  color: var(--ink-3);
+}
+
+.about-tile--job .tile-arrow {
+  color: var(--paper-ink);
+}
+
+/* ---------- Project cards (a result's project, the paper's project) ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 760px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+.card {
+  padding: 18px 52px 22px 20px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.9);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 44px 90px -40px rgba(0, 0, 0, 0.95);
+}
+
+.card__note {
+  font: 500 10px/1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-on-paper);
+}
+
+.card__title {
+  margin-top: 10px;
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.card__subtitle {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--paper-ink-2);
+}
+
+.card__numbers {
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--paper-line);
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--paper-ink-2);
+}
+
+.card__number b {
+  margin-right: 6px;
+  font-weight: 600;
+  color: var(--paper-ink);
+}
+
+.result-tile__brands {
+  display: flex;
+  align-items: center;
+  min-height: 22px;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.result-tile__brands .brands {
+  --brand-h: 18px;
+}

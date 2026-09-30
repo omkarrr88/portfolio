@@ -8,6 +8,7 @@ import {
   type CameraParams,
 } from './formation'
 import { fragmentShader, vertexShader } from './shaders'
+import { sampleTravel, travelDuration, type Travel } from './travel'
 import { GLError, createFullScreenTriangle, createProgram, uniformLocations, type UniformLocations } from './gl'
 import { palette } from '../theme/palette'
 
@@ -54,6 +55,8 @@ type UniformName = (typeof UNIFORMS)[number]
 export interface FrameInfo {
   readonly stage: number
   readonly activeRing: number
+  /** True while navigation is moving the camera between pages. */
+  readonly travelling: boolean
   readonly camera: CameraParams
 }
 
@@ -90,7 +93,13 @@ export class RingScene {
   private pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
   private worldZoom = 1
   private stage = 0
-  private targetStage = 0
+  /** Where navigation has put the camera; scrolling adds a small offset on top. */
+  private baseStage = 0
+  private baseYaw = 0
+  private travel: Travel | null = null
+  private scrollOffset = 0
+  private targetScrollOffset = 0
+  private clock = 0
   private pointerX = 0
   private pointerY = 0
   private smoothX = 0
@@ -134,8 +143,35 @@ export class RingScene {
     this.applyPixelRatio(this.pixelRatio)
   }
 
-  setTargetStage(stage: number): void {
-    this.targetStage = stage
+  /**
+   * Moves the camera to a page's place in the formation. The first placement
+   * (and every one under reduced motion) is immediate; later ones travel from
+   * wherever the camera is now, scroll included. The new page's own scroll
+   * offset starts from zero and is folded in as the camera arrives.
+   */
+  travelTo(stage: number, yaw: number, immediate = false): void {
+    if (immediate || this.options.reducedMotion) {
+      this.travel = null
+      this.baseStage = stage
+      this.baseYaw = yaw
+      return
+    }
+    this.travel = {
+      fromStage: this.stage,
+      toStage: stage,
+      fromYaw: this.baseYaw,
+      toYaw: yaw,
+      start: this.clock,
+      duration: travelDuration(this.stage, stage),
+    }
+    this.baseStage = this.stage
+    this.scrollOffset = 0
+    this.targetScrollOffset = 0
+  }
+
+  /** How far scrolling has carried the camera past the page's place: a ring per chapter at home, a drift elsewhere. */
+  setScrollOffset(offset: number): void {
+    this.targetScrollOffset = offset
   }
 
   /** Normalised pointer, -1..1 on both axes. */
@@ -249,11 +285,26 @@ export class RingScene {
     this.lastTime = time
     const dt = dtMs / 1000
     const reduced = this.options.reducedMotion
+    this.clock += dt
     if (!reduced) this.elapsed += dt
     this.watchFrameTime(dtMs)
 
     const ease = (rate: number) => 1 - Math.exp(-dt * rate)
-    this.stage = reduced ? this.targetStage : this.stage + (this.targetStage - this.stage) * ease(6)
+    this.scrollOffset = reduced
+      ? this.targetScrollOffset
+      : this.scrollOffset + (this.targetScrollOffset - this.scrollOffset) * ease(6)
+    if (this.travel) {
+      const at = sampleTravel(this.travel, this.clock)
+      this.baseYaw = at.yaw
+      // Blend the arriving page's scroll in with the travel, so landing mid-page never jumps.
+      this.stage = at.stage + this.scrollOffset * at.progress
+      if (at.done) {
+        this.travel = null
+        this.baseStage = at.stage
+      }
+    } else {
+      this.stage = this.baseStage + this.scrollOffset
+    }
     this.dim = reduced ? this.targetDim : this.dim + (this.targetDim - this.dim) * ease(3)
     this.intro = reduced ? 1 : Math.min(1, this.intro + dt / INTRO_SECONDS)
     this.smoothX += (this.pointerX - this.smoothX) * ease(3)
@@ -263,7 +314,7 @@ export class RingScene {
 
     const view = cameraForStage(this.stage, this.width, this.height)
     const pitch = view.pitch + (reduced ? 0 : this.smoothY * 0.05 * (1 - view.finale) + this.velocityTilt)
-    const yaw = reduced ? 0 : this.smoothX * 0.07
+    const yaw = this.baseYaw + (reduced ? 0 : this.smoothX * 0.07)
     const activeRing = activeRingForStage(this.stage)
     const u = gpu.uniforms
 
@@ -285,6 +336,7 @@ export class RingScene {
     this.options.onFrame?.({
       stage: this.stage,
       activeRing,
+      travelling: this.travel !== null,
       camera: {
         pitch,
         yaw,

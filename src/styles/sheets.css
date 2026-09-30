@@ -1,4 +1,4 @@
-/* Paper: the project sheets (rings 05–03), the More work ledger (ring 02). */
+/* Paper: the project sheet on each project page. */
 
 /* ---------- Project opening: the problem, set over the formation ---------- */
 
@@ -18,8 +18,7 @@
 
 /* ---------- The sheet ---------- */
 
-.sheet,
-.ledger {
+.sheet {
   position: relative;
   padding: var(--sheet-pad);
   background: var(--paper);
@@ -30,8 +29,7 @@
     0 20px 40px -20px rgba(0, 0, 0, 0.6);
 }
 
-.sheet::before,
-.ledger::before {
+.sheet::before {
   content: '';
   position: absolute;
   top: 0;
@@ -41,19 +39,16 @@
   background: var(--accent);
 }
 
-.sheet ::selection,
-.ledger ::selection {
+.sheet ::selection {
   background: var(--paper-ink);
   color: var(--paper);
 }
 
-.sheet :focus-visible,
-.ledger :focus-visible {
+.sheet :focus-visible {
   outline-color: var(--accent-on-paper);
 }
 
-.sheet__meta,
-.ledger__head {
+.sheet__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 22px;
@@ -184,17 +179,25 @@
 }
 
 @media (min-width: 900px) {
-  .numbers:not(.numbers--compact) {
+  .numbers {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .numbers:not(.numbers--compact) .numbers__item {
+  .numbers.numbers--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .numbers.numbers--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .numbers .numbers__item {
     padding: 18px 20px 0;
     border-bottom: 0;
     border-left: 1px solid var(--paper-line);
   }
 
-  .numbers:not(.numbers--compact) .numbers__item:first-child {
+  .numbers .numbers__item:first-child {
     padding-left: 0;
     border-left: 0;
   }
@@ -310,137 +313,9 @@
   cursor: progress;
 }
 
-/* ---------- Ring 02: the ledger ---------- */
-
-.ledger__head {
-  justify-content: space-between;
-  margin-bottom: 0;
-}
-
-.entry {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
-  padding: clamp(32px, 5vw, 56px) 0;
-  border-bottom: 1px solid var(--paper-line);
-  /* Anchor jumps land below the HUD. */
-  scroll-margin-top: calc(var(--hud-h) + 24px);
-}
-
-.entry:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
-.entry__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 16px;
-  font: 500 11px/1.5 var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--paper-ink-2);
-}
-
-.entry__index {
-  font: 500 28px/1 var(--font-display);
-  letter-spacing: -0.03em;
+.sheet__brands {
+  --brand-h: 15px;
+  margin-right: 14px;
+  vertical-align: -2px;
   color: var(--paper-ink);
-}
-
-.entry__placement {
-  color: var(--accent-on-paper);
-}
-
-.entry__title {
-  font-size: clamp(27px, 3vw, 40px);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-}
-
-.entry__subtitle {
-  margin: 10px 0 20px;
-  font-size: 19px;
-  line-height: 1.3;
-  color: var(--paper-ink-2);
-}
-
-.entry__text {
-  max-width: 38em;
-  margin-bottom: 14px;
-  font-size: 16px;
-  line-height: 1.62;
-}
-
-.entry__main .facts {
-  margin-top: 22px;
-}
-
-.entry__aside {
-  min-width: 0;
-}
-
-.entry__aside .numbers {
-  margin-bottom: 24px;
-}
-
-.entry__aside .figure {
-  margin-bottom: 0;
-}
-
-.numbers--compact {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (min-width: 1000px) {
-  .entry {
-    grid-template-columns: 150px minmax(0, 1fr) 290px;
-    gap: 44px;
-  }
-
-  .entry__meta {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .numbers--compact {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .numbers--compact .numbers__item,
-  .numbers--compact .numbers__item:nth-child(2n) {
-    padding: 14px 0 16px;
-    border-left: 0;
-  }
-}
-
-@media (min-width: 700px) and (max-width: 999px) {
-  .entry {
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 22px 36px;
-  }
-
-  .entry__meta {
-    grid-column: 1 / -1;
-  }
-
-  .numbers--compact {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .numbers--compact .numbers__item,
-  .numbers--compact .numbers__item:nth-child(2n) {
-    padding: 14px 0 16px;
-    border-left: 0;
-  }
-}
-
-.numbers--compact .numbers__value {
-  font-size: clamp(26px, 2.6vw, 34px);
-}
-
-.numbers--compact .numbers__value {
-  white-space: normal;
 }

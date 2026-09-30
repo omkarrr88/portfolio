@@ -1,3 +1,4 @@
+import type { BrandId } from './brands'
 import type { Achievement, Education, Experience, Leadership, Publication, SkillGroup } from './types'
 
 /** Every fact here is taken from public/resume.tex; keep the two in step. */
@@ -75,6 +76,9 @@ export const skills: readonly SkillGroup[] = [
 
 export const achievements: readonly Achievement[] = [
   {
+    id: 'meta-pytorch',
+    brands: ['meta', 'pytorch'],
+    short: 'Meta PyTorch',
     result: '7th',
     field: 'of 31,000+ teams',
     event: 'Meta PyTorch Hackathon',
@@ -82,10 +86,15 @@ export const achievements: readonly Achievement[] = [
     place: 'Bengaluru',
     date: 'Apr 2026',
     detail: 'Online round with the PyTorch Training Run Debugger, then the offline finals (top 800) with Chakravyuh.',
-    projectId: 'chakravyuh',
-    projectLabel: 'Chakravyuh',
+    wonWith: [
+      { projectId: 'debugger', note: 'Online round' },
+      { projectId: 'chakravyuh', note: 'Offline finals, top 800' },
+    ],
   },
   {
+    id: 'et-ai',
+    brands: ['economic-times'],
+    short: 'ET AI Hackathon',
     result: 'Top 10',
     field: 'of 15,000+ teams',
     event: 'ET AI Hackathon 2.0',
@@ -94,10 +103,12 @@ export const achievements: readonly Achievement[] = [
     date: 'Aug 2026',
     detail: 'Presented VayuNetra at the Hyderabad finale.',
     href: 'https://economictimes.indiatimes.com/et-ai-hackathon/2nd-edition',
-    projectId: 'vayunetra',
-    projectLabel: 'VayuNetra',
+    wonWith: [{ projectId: 'vayunetra', note: 'Presented at the Hyderabad finale' }],
   },
   {
+    id: 'iqoo',
+    brands: ['iqoo'],
+    short: 'iQOO Hackathon',
     result: 'Top 7',
     field: 'of 7,000+ teams',
     event: 'iQOO Hackathon 2026, Pune City Battle',
@@ -106,26 +117,29 @@ export const achievements: readonly Achievement[] = [
     date: 'Sept 2026',
     detail: 'Placed in the HealthTech track with Fitmon.',
     href: 'https://iqoo.reskilll.com/',
-    projectId: 'fitmon',
-    projectLabel: 'Fitmon',
+    wonWith: [{ projectId: 'fitmon', note: 'HealthTech track' }],
   },
   {
+    id: 'avishkar',
+    brands: [],
+    short: 'Avishkar',
     result: 'Finalist',
     event: 'Avishkar Research Project Competition 2025',
     organiser: 'Mumbai University',
     place: 'Mumbai',
     date: '2025',
     detail: "Reached the finals of Mumbai University's inter-collegiate research competition with the V2V research.",
-    projectId: 'v2v',
-    projectLabel: 'V2V',
+    wonWith: [{ projectId: 'v2v', note: 'The research behind it' }],
   },
 ]
 
 export const leadership: readonly Leadership[] = [
   {
     org: 'Computer Society of India, Terna Chapter',
+    href: 'https://www.instagram.com/csi_terna',
+    peak: 'Vice Chairperson, CSI',
     roles: [
-      { title: 'Advisor', period: 'Oct 2025 – Present' },
+      { title: 'Advisor', period: 'Oct 2025 – Sep 2026' },
       { title: 'Vice Chairperson', period: 'Oct 2024 – Oct 2025' },
       { title: 'Technical Executive', period: 'Nov 2023 – Oct 2024' },
     ],
@@ -133,6 +147,8 @@ export const leadership: readonly Leadership[] = [
   },
   {
     org: 'Training & Placement Cell, Terna',
+    href: 'https://www.instagram.com/tnp_terna',
+    peak: 'Deputy Secretary, T&P Cell',
     roles: [
       { title: 'Deputy Secretary', period: 'Nov 2024 – Oct 2025' },
       { title: 'Hospitality Committee Member', period: 'Nov 2023 – Nov 2024' },
@@ -141,6 +157,8 @@ export const leadership: readonly Leadership[] = [
   },
   {
     org: 'Revive Cultural Fest, Terna',
+    href: 'https://www.instagram.com/reviveterna',
+    peak: 'Hospitality HOD, Revive',
     roles: [
       { title: 'Hospitality HOD', period: 'Jan 2025 – Jan 2026' },
       { title: 'Senior Member', period: 'Jan 2024 – Jan 2025' },
@@ -151,6 +169,8 @@ export const leadership: readonly Leadership[] = [
 ]
 
 export const publication: Publication = {
+  id: 'paper',
+  short: 'V2V paper',
   title:
     'Vehicle-to-Vehicle Communication for Blind Spot Detection and Accident Prevention Using Severity-Gated Collision Risk Indexing',
   role: 'Co-author',
@@ -159,3 +179,7 @@ export const publication: Publication = {
   date: 'April 2026',
   projectId: 'v2v',
 }
+
+/** Logos of the events a project placed at, for the placement line on its sheet. */
+export const brandsForProject = (projectId: string): readonly BrandId[] =>
+  achievements.filter((a) => a.wonWith.some((w) => w.projectId === projectId)).flatMap((a) => a.brands)

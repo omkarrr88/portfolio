@@ -1,0 +1,397 @@
+/* Pages: the shell and its transitions, page heads and breadcrumbs, detail heads and feet. */
+
+/* ---------- Shell ---------- */
+
+.page {
+  position: relative;
+  z-index: 1;
+  /* Entrance transforms (tilted sheets) must never widen the page on phones. */
+  overflow-x: clip;
+}
+
+/* A new page starts hidden for a beat, so it never flashes before its entrance is set up. */
+.page.is-arriving {
+  animation: page-in 0.5s 0.25s var(--ease-out) backwards;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.page.is-leaving {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition:
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* The card you picked gives a small press before everything fades. */
+.is-chosen {
+  transform: scale(1.015);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.overview,
+.detail {
+  width: 100%;
+}
+
+.overview > *,
+.detail > *,
+.project > *,
+.record-page > *,
+.about-page > * {
+  width: min(100%, var(--content));
+  margin-inline: auto;
+}
+
+/* Overviews fit one screen: short top margin, everything visible at once. */
+.overview {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: calc(var(--hud-h) + clamp(20px, 5svh, 56px)) var(--gutter) calc(var(--hud-h) + 28px);
+}
+
+/* Details give the formation a moment before the content arrives. */
+.project--page,
+.record-page,
+.about-page {
+  padding: clamp(150px, 28svh, 270px) var(--gutter) calc(var(--hud-h) + 40px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.is-arriving {
+    animation: none;
+  }
+  .page.is-leaving {
+    transition: none;
+  }
+}
+
+/* ---------- Page head and breadcrumb marker ---------- */
+
+.page-head {
+  position: relative;
+  margin-bottom: clamp(28px, 5.5svh, 60px);
+}
+
+/* A dark halo behind the headline so it reads over bright rings. */
+.page-head::before,
+.project__open::before,
+.record-head::before {
+  content: '';
+  position: absolute;
+  inset: -20% -12% -20% -8%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(11, 10, 9, 0.85), rgba(11, 10, 9, 0));
+  pointer-events: none;
+}
+
+.page-head__title {
+  max-width: 21ch;
+  font-size: var(--headline);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.overview .page-head {
+  margin-bottom: clamp(24px, 4svh, 44px);
+}
+
+.overview .page-head__title {
+  max-width: 30ch;
+  font-size: clamp(28px, 3.3vw, 48px);
+  line-height: 1.06;
+}
+
+.page-head__lede {
+  max-width: 40em;
+  margin-top: 20px;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.overview .page-head__lede {
+  max-width: 62em;
+  margin-top: 14px;
+}
+
+/* Programmatic focus lands on the heading after navigation; no ring for that. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.marker__ring {
+  color: var(--accent);
+}
+
+.marker__rule {
+  flex: none;
+  width: 48px;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.marker__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  color: var(--ink);
+}
+
+.marker__crumbs li:not(:last-child)::after {
+  content: '/';
+  margin: 0 10px;
+  color: var(--ink-4);
+}
+
+.marker__label {
+  color: var(--ink-2);
+}
+
+.marker__link {
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.marker__link:hover {
+  color: var(--accent);
+}
+
+/* ---------- Detail heads: a result, the paper (the project opening lives in sheets.css) ---------- */
+
+.record-head {
+  position: relative;
+  margin-bottom: clamp(56px, 10svh, 120px);
+}
+
+.record-head__result {
+  font-size: clamp(72px, 13vw, 184px);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  color: var(--accent);
+}
+
+.record-head__result--small {
+  font-size: clamp(40px, 6vw, 84px);
+}
+
+.record-head__field {
+  font-size: 0.24em;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+}
+
+.record-head__title {
+  max-width: 22ch;
+  margin-top: 22px;
+  font-size: var(--headline);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.record-head__title--long {
+  max-width: 30ch;
+  font-size: clamp(26px, 3vw, 44px);
+  line-height: 1.12;
+}
+
+.record-head__meta {
+  margin-top: 18px;
+  font: 500 11px/1.5 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.record-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(56px, 9vw, 104px);
+}
+
+.record-body::before {
+  content: '';
+  position: absolute;
+  inset: -80px calc(-1 * var(--gutter));
+  z-index: -1;
+  background: var(--bg-veil);
+  -webkit-mask-image: linear-gradient(transparent, #000 120px, #000 calc(100% - 120px), transparent);
+  mask-image: linear-gradient(transparent, #000 120px, #000 calc(100% - 120px), transparent);
+  pointer-events: none;
+}
+
+.record-body__lead {
+  max-width: 34em;
+  margin-bottom: 16px;
+  font-size: clamp(19px, 1.7vw, 24px);
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+}
+
+/* ---------- Page foot: back, previous, next ---------- */
+
+.page-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  margin-top: clamp(72px, 12svh, 140px);
+  padding-top: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+
+@media (min-width: 760px) {
+  .page-foot {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.page-foot__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-2);
+  transition: color 0.3s;
+}
+
+.page-foot__back:hover {
+  color: var(--accent);
+}
+
+.page-foot__steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+}
+
+@media (min-width: 760px) {
+  .page-foot__steps {
+    justify-self: end;
+    min-width: min(100%, 560px);
+  }
+}
+
+.page-foot__step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.page-foot__step--next {
+  grid-column: 2;
+  text-align: right;
+}
+
+.page-foot__dir {
+  font: 500 10px/1.4 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.page-foot__name {
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  transition: color 0.3s;
+}
+
+.page-foot__step:hover .page-foot__name {
+  color: var(--accent);
+}
+
+/* ---------- About detail extras, not-found ---------- */
+
+.about-page__more {
+  margin-top: 20px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.missing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Organisers' logos ---------- */
+
+.brands {
+  --brand-h: 16px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px calc(var(--brand-h) * 1.1);
+  line-height: 0;
+}
+
+.brands,
+.brand {
+  max-width: 100%;
+}
+
+.brand {
+  display: inline-flex;
+  height: var(--brand-h);
+}
+
+/* Narrow tiles: a wide wordmark scales down to fit rather than spilling out. */
+.brand svg {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+}
+
+/* The wordmarks carry more ink than the Meta and PyTorch marks; set them a touch smaller so the row reads even. */
+.brand--economic-times {
+  height: calc(var(--brand-h) * 0.8);
+}
+
+.brand--iqoo {
+  height: calc(var(--brand-h) * 0.8);
+}
+
+.brand--pytorch {
+  height: calc(var(--brand-h) * 1.1);
+}
+
+.record-head__brands {
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+
+.record-head__brands .brands {
+  --brand-h: 26px;
+}

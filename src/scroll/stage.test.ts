@@ -48,3 +48,22 @@ describe('stageFromScroll', () => {
     expect(stageFromScroll(500, tops, 0)).toBe(0)
   })
 })
+
+describe('stageFromScroll with explicit stages', () => {
+  // Intro at 0, a chapter at stage 1, the next two stages further in.
+  const stages = [0, 1, 3] as const
+
+  it('moves by each chapter’s own step', () => {
+    expect(stageFromScroll(900 - 0.35 * vh, tops, vh, stages)).toBeCloseTo(1, 10)
+    expect(stageFromScroll(2200, tops, vh, stages)).toBeCloseTo(3, 10)
+  })
+
+  it('is halfway between two chapters halfway through the window', () => {
+    const start = 2200 - vh
+    expect(stageFromScroll(start + span / 2, tops, vh, stages)).toBeCloseTo(2, 10)
+  })
+
+  it('is 0 with no sections', () => {
+    expect(stageFromScroll(100, [], vh)).toBe(0)
+  })
+})

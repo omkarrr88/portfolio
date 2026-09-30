@@ -12,8 +12,7 @@ export function useSmoothScroll(enabled: boolean): Lenis | null {
 
   useEffect(() => {
     if (!enabled) return
-    // `anchors` routes in-page links (#chakravyuh and so on) through the same easing.
-    const instance = new Lenis({ autoRaf: true, lerp: 0.09, anchors: { duration: 1.6 } })
+    const instance = new Lenis({ autoRaf: true, lerp: 0.09 })
     setLenis(instance)
     return () => {
       instance.destroy()

@@ -1,13 +1,18 @@
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react'
 import type { RingScene, FrameInfo } from '../scene/RingScene'
 import { buildRings, projectPlanePoint } from '../scene/formation'
-import { chapterForRing, pad } from '../content/chapters'
-import type { StageListener } from '../hooks/useScrollStage'
+import type { ScrollListener } from '../hooks/usePageScroll'
+import type { Placement } from '../router/meta'
 import { clearance, type Span } from '../scroll/dim'
+import { pad } from '../lib/format'
 
 interface FormationProps {
   readonly reducedMotion: boolean
-  readonly ref?: Ref<StageListener>
+  /** Where the current page sits in the formation; changing it makes the camera travel. */
+  readonly placement: Placement
+  /** Name shown on a ring once the camera settles on it (the chapter at home, the page elsewhere). */
+  readonly labelFor: (ring: number) => string
+  readonly ref?: Ref<ScrollListener>
 }
 
 const RINGS = buildRings()
@@ -24,11 +29,12 @@ const labelOpacity = (stage: number) => {
  * The fixed WebGL backdrop plus the label that rides on the active ring.
  * The scene is loaded after first paint so the text is readable immediately.
  */
-export function Formation({ reducedMotion, ref }: FormationProps) {
+export function Formation({ reducedMotion, placement, labelFor, ref }: FormationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
   const sceneRef = useRef<RingScene | null>(null)
-  const lastStage = useRef(0)
+  const placementRef = useRef(placement)
+  const labelText = useRef(labelFor)
   const lastDim = useRef(0)
   const textBlocks = useRef<readonly Span[]>([])
   const [failed, setFailed] = useState(false)
@@ -36,10 +42,7 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
   useImperativeHandle(
     ref,
     () => ({
-      onStage: (stage) => {
-        lastStage.current = reducedMotion ? 0 : stage
-        sceneRef.current?.setTargetStage(lastStage.current)
-      },
+      onScrollOffset: (offset) => sceneRef.current?.setScrollOffset(offset),
       onVelocity: (v) => sceneRef.current?.setVelocity(v),
       onDim: (amount) => {
         lastDim.current = amount
@@ -49,34 +52,46 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
         textBlocks.current = blocks
       },
     }),
-    [reducedMotion],
+    [],
   )
+
+  useEffect(() => {
+    labelText.current = labelFor
+  }, [labelFor])
+
+  useEffect(() => {
+    placementRef.current = placement
+    sceneRef.current?.travelTo(placement.stage, placement.yaw)
+  }, [placement])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     let disposed = false
-    let lastRing = 0
+    let shownText = ''
 
-    const onFrame = ({ stage, activeRing, camera }: FrameInfo) => {
-      const label = labelRef.current
-      if (!label) return
-      if (activeRing !== lastRing) {
-        lastRing = activeRing
-        label.textContent = `${pad(activeRing)} — ${chapterForRing(activeRing).label}`
-      }
+    const onFrame = ({ stage, activeRing, travelling, camera }: FrameInfo) => {
+      const el = labelRef.current
+      if (!el) return
       const ring = RINGS[activeRing - 1]
-      if (!ring) {
-        label.style.opacity = '0'
+      const name = labelText.current(activeRing)
+      // Nothing to label at the centre, on an unnamed ring, mid-flight, or with motion reduced.
+      if (!ring || !name || travelling || reducedMotion) {
+        el.style.opacity = '0'
         return
+      }
+      const text = `${pad(activeRing)} — ${name}`
+      if (text !== shownText) {
+        shownText = text
+        el.textContent = text
       }
       const point = projectPlanePoint({ x: 0, y: ring.radius }, camera)
       if (!point) return
-      label.style.transform = `translate3d(${point.x.toFixed(1)}px, ${point.y.toFixed(1)}px, 0) translate(-50%, -150%)`
+      el.style.transform = `translate3d(${point.x.toFixed(1)}px, ${point.y.toFixed(1)}px, 0) translate(-50%, -150%)`
       // On narrow screens the outer ring's label would collide with the hero text.
-      const hidden = reducedMotion || (activeRing === 7 && camera.width < 700)
+      const crowded = activeRing === 7 && camera.width < 700
       const room = clearance(window.scrollY + point.y - 10, textBlocks.current, LABEL_CLEARANCE_PX)
-      label.style.opacity = hidden ? '0' : (labelOpacity(stage) * room).toFixed(3)
+      el.style.opacity = crowded ? '0' : (labelOpacity(stage) * room).toFixed(3)
     }
 
     const onPointer = (event: PointerEvent) => {
@@ -95,7 +110,7 @@ export function Formation({ reducedMotion, ref }: FormationProps) {
         }
         const scene = new RingScene(canvas, { reducedMotion, onFrame, onError })
         scene.resize(canvas.clientWidth, canvas.clientHeight)
-        scene.setTargetStage(lastStage.current)
+        scene.travelTo(placementRef.current.stage, placementRef.current.yaw, true)
         scene.setDim(lastDim.current)
         sceneRef.current = scene
         resizeObserver.observe(canvas)

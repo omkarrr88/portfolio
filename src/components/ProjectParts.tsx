@@ -2,9 +2,9 @@ import type { Fact, Figure, FigureLayout, KeyNumber, Link } from '../content/typ
 import { ExternalLink } from './ExternalLink'
 
 /** Static figures from the repo, no counters: the numbers are the point, not the animation. */
-export function KeyNumbers({ numbers, compact = false }: { readonly numbers: readonly KeyNumber[]; readonly compact?: boolean }) {
+export function KeyNumbers({ numbers }: { readonly numbers: readonly KeyNumber[] }) {
   return (
-    <dl className={compact ? 'numbers numbers--compact' : 'numbers'} data-stagger>
+    <dl className={`numbers numbers--${numbers.length}`} data-stagger>
       {numbers.map((n) => (
         <div key={n.label} className="numbers__item">
           <dt className="numbers__value">{n.value}</dt>

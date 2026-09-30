@@ -10,6 +10,9 @@ const launchOptions = {
 export default defineConfig({
   testDir: 'e2e',
   timeout: 30_000,
+  // Every browser renders the WebGL formation on the CPU (SwiftShader); a few at a time keeps timings honest.
+  workers: 2,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
   reporter: 'list',
   use: { baseURL: `http://localhost:${PORT}`, launchOptions },

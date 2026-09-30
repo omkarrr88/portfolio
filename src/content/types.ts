@@ -1,3 +1,5 @@
+import type { BrandId } from './brands'
+
 /** Shapes of everything the site says. Facts come from public/resume.tex and each project's repo. */
 
 export interface Link {
@@ -28,9 +30,11 @@ export interface KeyNumber {
 export type FigureLayout = 'chart' | 'screen' | 'phones'
 
 export interface Project {
-  /** Section anchor. */
+  /** URL slug: /work/<id>. */
   readonly id: string
   readonly title: string
+  /** Shorter name for breadcrumbs and the ring label, when the title is long. */
+  readonly short?: string
   readonly devanagari?: string
   readonly subtitle: string
   readonly category: string
@@ -69,7 +73,17 @@ export interface SkillGroup {
   readonly items: readonly string[]
 }
 
+/** A project an achievement was won with, and at what stage. */
+export interface WonWith {
+  readonly projectId: string
+  readonly note: string
+}
+
 export interface Achievement {
+  /** URL slug: /record/<id>. */
+  readonly id: string
+  /** Short name for labels and breadcrumbs. */
+  readonly short: string
   readonly result: string
   readonly field?: string
   readonly event: string
@@ -78,9 +92,9 @@ export interface Achievement {
   readonly date: string
   readonly detail: string
   readonly href?: string
-  /** Anchor of the chapter the result was won with. */
-  readonly projectId?: string
-  readonly projectLabel?: string
+  readonly wonWith: readonly WonWith[]
+  /** Organisers' logos, shown beside the result. */
+  readonly brands: readonly BrandId[]
 }
 
 export interface Role {
@@ -90,12 +104,19 @@ export interface Role {
 
 export interface Leadership {
   readonly org: string
+  /** The role that best sums up the ladder, for one-line summaries. */
+  readonly peak: string
   /** Most recent first. */
   readonly roles: readonly Role[]
   readonly detail: string
+  /** The committee's own page (Instagram). */
+  readonly href?: string
 }
 
 export interface Publication {
+  /** URL slug: /record/<id>. */
+  readonly id: string
+  readonly short: string
   readonly title: string
   readonly role: string
   readonly venue: string
@@ -104,9 +125,12 @@ export interface Publication {
   readonly projectId: string
 }
 
+
+/** A chapter of the home scroll. */
 export interface Chapter {
-  /** 7 (outer ring) to 1 (inner ring); 0 is the centre. */
-  readonly ring: number
+  /** Where the camera settles for it: 0 is the outer ring, 7 the centre. */
+  readonly stage: number
   readonly label: string
+  /** Element id, so links can jump to it: /#work. */
   readonly anchor: string
 }

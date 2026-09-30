@@ -1,20 +1,18 @@
 import type { Chapter } from './types'
 
-/** One chapter per ring, outside in. The centre (ring 0) is contact. */
+/**
+ * The home scroll, outside in. Each chapter settles on a ring (stage 0 is the
+ * outer ring 07, stage 7 the centre); the rings skipped between chapters are
+ * where that section's own pages sit, one ring deeper.
+ */
 export const chapters: readonly Chapter[] = [
-  { ring: 7, label: 'Intro', anchor: 'intro' },
-  { ring: 6, label: 'Now', anchor: 'now' },
-  { ring: 5, label: 'Chakravyuh', anchor: 'chakravyuh' },
-  { ring: 4, label: 'VayuNetra', anchor: 'vayunetra' },
-  { ring: 3, label: 'Fitmon', anchor: 'fitmon' },
-  { ring: 2, label: 'More work', anchor: 'more-work' },
-  { ring: 1, label: 'Beyond code', anchor: 'beyond' },
-  { ring: 0, label: 'Centre', anchor: 'centre' },
+  { stage: 0, label: 'Intro', anchor: 'intro' },
+  { stage: 1, label: 'Work', anchor: 'work' },
+  { stage: 3, label: 'Record', anchor: 'record' },
+  { stage: 5, label: 'About', anchor: 'about' },
+  { stage: 7, label: 'Contact', anchor: 'contact' },
 ]
 
-export const chapterForRing = (ring: number): Chapter => chapters.find((c) => c.ring === ring) ?? chapters[0]
-
-export const pad = (n: number): string => String(n).padStart(2, '0')
-
-/** "Ring 05" for the rings, "Centre" for the middle. */
-export const ringName = (ring: number): string => (ring === 0 ? 'Centre' : `Ring ${pad(ring)}`)
+/** The chapter the reader is in at a scroll stage: the last one the camera has reached, give or take half a ring. */
+export const chapterForStage = (stage: number): Chapter =>
+  chapters.reduce((current, c) => (c.stage <= stage + 0.5 ? c : current), chapters[0])

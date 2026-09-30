@@ -7,14 +7,14 @@ interface BlockProps {
   readonly children: ReactNode
 }
 
-/** A labelled part of a chapter. On wide screens the label keeps pace in its own column. */
+/** A labelled part of a page. On wide screens the label keeps pace in its own column. */
 export function Block({ id, label, note, children }: BlockProps) {
   return (
     <section className="block" aria-labelledby={id}>
       <div className="block__aside">
-        <h3 id={id} className="block__label">
+        <h2 id={id} className="block__label">
           {label}
-        </h3>
+        </h2>
         {note ? <p className="block__note">{note}</p> : null}
       </div>
       <div className="block__body">{children}</div>
